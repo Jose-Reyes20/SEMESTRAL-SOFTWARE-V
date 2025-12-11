@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Registro - MatchaSalon</title>
-   <link rel="stylesheet" href="./CSS/style.css">
+    <title>Registro - Distribuidora22</title>
+    <link rel="stylesheet" href="./CSS/style.css">
 </head>
 
 <body>
@@ -23,7 +23,6 @@
                 <li><a href="index.html">Inicio</a></li>
                 <li><a href="Productos.html">Productos</a></li>
                 
-
                 <li class="login-icon">
                     <a href="login.html" aria-label="Iniciar Sesión">
                         <svg viewBox="0 0 24 24" width="26" height="26">
@@ -47,11 +46,22 @@
 
             <form id="register-form">
 
-                <label class="login-label">Nombre completo</label>
-                <input type="text" id="reg-nombre" class="login-input" required placeholder="Ej: Ana Gómez">
+                <div style="display: flex; gap: 10px;">
+                    <div style="width: 50%;">
+                        <label class="login-label">Nombre</label>
+                        <input type="text" id="reg-nombre" class="login-input" required placeholder="Ej: Ana">
+                    </div>
+                    <div style="width: 50%;">
+                        <label class="login-label">Apellido</label>
+                        <input type="text" id="reg-apellido" class="login-input" required placeholder="Ej: Gómez">
+                    </div>
+                </div>
 
                 <label class="login-label">Correo electrónico</label>
                 <input type="email" id="reg-email" class="login-input" required placeholder="Ej: usuario@gmail.com">
+
+                <label class="login-label">Dirección</label>
+                <input type="text" id="reg-direccion" class="login-input" required placeholder="Ej: Vía España, Casa 123">
 
                 <label class="login-label">Teléfono</label>
                 <input type="text" id="reg-telefono" class="login-input" required placeholder="Ej: 6000-0000">
@@ -71,11 +81,8 @@
     </section>
 </main>
 
-
 <script src="JS/config.js"></script>
-<script src="JS/session.js"></script>
-<script src="./JS/regristrarse.js" type="module"></script>
-<script src="JS/carrito.js"></script>
+<script src="./JS/regristrarse.js"></script>
 
 </body>
 </html>

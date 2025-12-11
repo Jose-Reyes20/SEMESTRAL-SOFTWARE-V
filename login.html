@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Iniciar Sesión - MatchaSalon</title>
+    <title>Iniciar Sesión - Distribuidora22</title>
     <link rel="stylesheet" href="CSS/style.css">
 </head>
 
@@ -21,9 +21,8 @@
         <nav class="navbar">
             <ul>
                 <li><a href="index.html">Inicio</a></li>
-                <li><a href="Productos.html">Productos</a></li>
+                <li><a href="productos.html">Productos</a></li>
                 
-                <!-- Ícono del carrito -->
                 <li class="cart-icon">
                     <a href="carrito.html" aria-label="Carrito">
                         <svg width="26" height="26" viewBox="0 0 24 24" aria-hidden="true">
@@ -33,13 +32,10 @@
                             <circle cx="10" cy="19" r="1" fill="#5E925C"/>
                             <circle cx="17" cy="19" r="1" fill="#5E925C"/>
                         </svg>
-
-                        <!-- Contador -->
                         <span id="cart-count">0</span>
                     </a>
                 </li>
 
-                <!-- Ícono Login -->
                 <li class="login-icon" id="user-area">
                     <a href="login.html" aria-label="Iniciar Sesión" id="login-link">
                         <svg viewBox="0 0 24 24" width="26" height="26">
@@ -49,15 +45,12 @@
                         </svg>
                     </a>
                 </li>
-
             </ul>
         </nav>
     </div>
 </header>
 
-
 <main class="login-main">
-
     <section class="login-section">
         <div class="login-card">
 
@@ -67,10 +60,10 @@
             <form id="login-form">
                 
                 <label class="login-label">Correo electrónico</label>
-                <input type="email" class="login-input" required placeholder="Ej: usuario@gmail.com">
+                <input type="email" id="login-email" class="login-input" required placeholder="Ej: usuario@gmail.com">
 
                 <label class="login-label">Contraseña</label>
-                <input type="password" class="login-input" required placeholder="••••••••">
+                <input type="password" id="login-pass" class="login-input" required placeholder="••••••••">
 
                 <button type="submit" class="login-btn">Entrar</button>
 
@@ -78,53 +71,38 @@
                     <a href="registrarse.html">¿No tienes cuenta? Regístrate aquí</a>
                 </p>
 
-
             </form>
 
         </div>
     </section>
-
 </main>
 
-
 <footer class="footer container">
-        <div class="footer-links">
-            <div class="link">
-                <h3>Contactos</h3>
-                
-<ul>
-    <li><strong>Teléfono:</strong> +507 6501-2234</li>
-    <li><strong>WhatsApp:</strong> +507 6889-4410</li>
-    <li><strong>Correo:</strong> distribuidora.info@gmail.com</li>
-    <li><strong>Dirección:</strong> Panamá, Ciudad de Panamá</li>
-</ul>
-
-                
-            </div>
-             <div class="link">
-                <h3>Redes sociales</h3>
-                <ul>
-                    <li><a href="#">Instragram| @Disribuidora22.com</a></li>
-                    <li><a href="#">Tik Tok | @Distribuidora22.com</a></li>
-                </ul>
-            </div>
-             <div class="link">
-                <h3>Servicios</h3>
-                <ul>
-                    <li><a href="#">Distribución de Productos</a></li>
-                    <li><a href="#">Entrega a Domicilio</a></li>
-                    <li><a href="#">Abastecimiento a Negocios</a></li>
-                    <li><a href="#">Ventas al por Mayor</a></li>
-                </ul>
-            </div>
-             <div class="link">
-                <h3>Sucursales</h3>
-                <ul>
-                    <li><a href="#">24 De Diciembre| 8am a 4:30pm</a></li>
-                </ul>
-            </div>
+    <div class="footer-links">
+        <div class="link">
+            <h3>Contactos</h3>
+            <ul>
+                <li><strong>Teléfono:</strong> +507 6501-2234</li>
+                <li><strong>WhatsApp:</strong> +507 6889-4410</li>
+                <li><strong>Correo:</strong> distribuidora.info@gmail.com</li>
+                <li><strong>Dirección:</strong> Panamá, Ciudad de Panamá</li>
+            </ul>
         </div>
-    </footer>
+        <div class="link">
+            <h3>Redes sociales</h3>
+            <ul>
+                <li><a href="#">Instagram | @Distribuidora22.com</a></li>
+                <li><a href="#">TikTok | @Distribuidora22.com</a></li>
+            </ul>
+        </div>
+        <div class="link">
+            <h3>Sucursales</h3>
+            <ul>
+                <li><a href="#">24 De Diciembre| 8am a 4:30pm</a></li>
+            </ul>
+        </div>
+    </div>
+</footer>
 
 <script src="JS/config.js"></script>
 <script src="JS/login.js"></script>
