@@ -1,20 +1,17 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿// Models/Cliente.cs
 
-namespace Salon_Api.Modelo
+namespace EcommerceApi.Models
 {
-    public class Clientes
+    public class Cliente
     {
-        public int IdCliente { get; set; }
-        public string Nombre { get; set; } = null!;
-        public string? Telefono { get; set; }
-        public string? Correo { get; set; }
+        public int Id { get; set; }
+        public string Nombre { get; set; }
+        public string Apellido { get; set; }
+        public string Direccion { get; set; }
+        public string Telefono { get; set; }
+        public string Correo { get; set; } // Único
 
-        [Column("PasswordHash")]
-        public string PasswordHash { get; set; } = null!;
-
-
-        public DateTime FechaRegistro { get; set; }
-        public ICollection<Ventas>? Ventas { get; set; }
-        public ICollection<Citas>? Citas { get; set; }
+        // Relación: Un cliente puede tener un usuario
+        public Usuario Usuario { get; set; }
     }
 }
