@@ -1,46 +1,60 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Salon_Api.DTO;
-using Salon_Api.Services.Interfaces;
+﻿// Controllers/AuthController.cs
 
-namespace Salon_Api.Controllers
+using Microsoft.AspNetCore.Mvc;
+using EcommerceApi.DTOs;
+using EcommerceApi.Services;
+
+namespace EcommerceApi.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/auth")]
     [ApiController]
     public class AuthController : ControllerBase
     {
-        private readonly IAuthService _authService;
+        private readonly AuthService _authService;
 
-        public AuthController(IAuthService authService)
+        public AuthController(AuthService authService)
         {
             _authService = authService;
         }
 
-        [HttpPost("login")]
-        public async Task<IActionResult> Login([FromBody] LoginDto dto)
+        // POST /api/auth/register
+        [HttpPost("register")]
+        public IActionResult Register([FromBody] UserRegisterDto registerDto)
         {
-            try
+            if (!ModelState.IsValid)
             {
-                var cliente = await _authService.Login(dto);
-
-                if (cliente == null)
-                    return Unauthorized(new { mensaje = "Correo o contraseña incorrectos" });
-
-                // Determine role based on email
-                string rol = cliente.Correo == "admin@matcha.com" ? "admin" : "usuario";
-
-                return Ok(new
-                {
-                    id = cliente.IdCliente,
-                    nombre = cliente.Nombre,
-                    correo = cliente.Correo,
-                    rol = rol
-                });
+                return BadRequest(ModelState);
             }
-            catch (Exception)
+
+            var nuevoUsuario = _authService.Register(registerDto);
+
+            return CreatedAtAction(nameof(Register), new { message = "Registro exitoso", userId = nuevoUsuario.Id });
+        }
+
+        // POST /api/auth/login
+        [HttpPost("login")]
+        public IActionResult Login([FromBody] UserLoginDto loginDto)
+        {
+            if (!ModelState.IsValid)
             {
-                // Mensaje genérico para el usuario
-                return BadRequest(new { mensaje = "Ocurrió un error al intentar iniciar sesión." });
+                return BadRequest(ModelState);
             }
+
+            var usuario = _authService.Login(loginDto);
+
+            if (usuario == null)
+            {
+                return Unauthorized(new { message = "Credenciales inválidas" }); // 401 Unauthorized
+            }
+
+            // Retorna la información necesaria para el cliente (token y datos básicos)
+            return Ok(new
+            {
+                Token = "GENERATED_JWT_TOKEN", // Aquí iría el JWT real
+                UsuarioId = usuario.Id,
+                Rol = usuario.Rol,
+                ClienteId = usuario.ClienteId
+            });
         }
     }
 }

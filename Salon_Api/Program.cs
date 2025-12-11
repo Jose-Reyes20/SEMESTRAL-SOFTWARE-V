@@ -1,53 +1,52 @@
-using Microsoft.EntityFrameworkCore;
-using Salon_Api.Data;
-using Salon_Api.Services;
-using Salon_Api.Services.Interfaces;
+using EcommerceApi.Services; // Necesario para acceder a ArticuloService y AuthService
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Entity Framework configuración con SQL
-builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+// ***************************************************************
+// 1. CONFIGURACIÓN DE SERVICIOS
+// ***************************************************************
 
-// Registro de Servicios
-builder.Services.AddScoped<IVentasService, VentasService>();
-//builder.Services.AddScoped<IDetalleVentasService, DetalleVentasService>();
-builder.Services.AddScoped<IClientesService, ClientesService>();
-builder.Services.AddScoped<ICitasService, CitasService>();
-builder.Services.AddScoped<IAuthService, AuthService>();
+// 1.1 Agregar el servicio de artículos (Inventario)
+// Usamos AddSingleton/AddScoped/AddTransient dependiendo del ciclo de vida. 
+// Para este ejemplo de simulación, AddSingleton es suficiente.
+builder.Services.AddSingleton<ArticuloService>();
 
+// 1.2 Agregar el servicio de autenticación (Clientes y Usuarios)
+builder.Services.AddSingleton<AuthService>();
 
-// Controladores
 builder.Services.AddControllers();
 
-// Swagger
+// Opcional: Configuración de Swagger/OpenAPI para documentación de la API
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-// CORS para frontend
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy("AllowAll", policy =>
-    {
-        policy.AllowAnyOrigin()
-              .AllowAnyMethod()
-              .AllowAnyHeader();
-    });
-});
+
+// ***************************************************************
+// 2. CONSTRUCCIÓN DE LA APLICACIÓN
+// ***************************************************************
 
 var app = builder.Build();
 
-// Middleware
+
+// ***************************************************************
+// 3. MIDDLEWARE (HTTP request pipeline)
+// ***************************************************************
+
+// Configuración de Swagger solo en desarrollo
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+    app.UseDeveloperExceptionPage();
 }
 
 app.UseHttpsRedirection();
-app.UseAuthorization();
-app.UseCors("AllowAll");
 
-app.MapControllers();
+// Asegúrate de que el middleware de enrutamiento esté antes de MapControllers
+app.UseRouting();
+
+app.UseAuthorization(); // Usar autenticación y autorización
+
+app.MapControllers(); // Mapea los controladores (endpoints)
 
 app.Run();
