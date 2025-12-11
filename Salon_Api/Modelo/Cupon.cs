@@ -1,18 +1,29 @@
-using System.Runtime.InteropServices;
+using System;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
-// En proyectos de estilo SDK como este, varios atributos de ensamblado que definían
-// en este archivo se agregan ahora automáticamente durante la compilación y se rellenan
-// con valores definidos en las propiedades del proyecto. Para obtener detalles acerca
-// de los atributos que se incluyen y cómo personalizar este proceso, consulte https://aka.ms/assembly-info-properties
+namespace Salon_Api.Modelo
+{
+    [Table("cupon")]
+    public class Cupon
+    {
+        [Key]
+        [Column("id")]
+        public int Id { get; set; }
 
+        [Column("codigo")]
+        public string Codigo { get; set; } = null!;
 
-// Al establecer ComVisible en false, se consigue que los tipos de este ensamblado
-// no sean visibles para los componentes COM. Si tiene que acceder a un tipo en este
-// ensamblado desde COM, establezca el atributo ComVisible en true en ese tipo.
+        [Column("descuento")]
+        public decimal Descuento { get; set; }
 
-[assembly: ComVisible(false)]
+        [Column("estado")]
+        public bool Estado { get; set; }
 
-// El siguiente GUID es para el identificador de typelib, si este proyecto se expone
-// en COM.
+        [Column("created_at")]
+        public DateTime CreatedAt { get; set; }
 
-[assembly: Guid("d3c63568-8d40-4cb0-9240-365d8f25da74")]
+        [Column("updated_at")]
+        public DateTime UpdatedAt { get; set; }
+    }
+}

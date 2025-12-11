@@ -1,18 +1,61 @@
-using System.Runtime.InteropServices;
+using Microsoft.EntityFrameworkCore;
+using Salon_Api.Data;
+using Salon_Api.Modelo;
+using Salon_Api.Services.Interfaces;
+using Salon_Api.DTO;
 
-// En proyectos de estilo SDK como este, varios atributos de ensamblado que definían
-// en este archivo se agregan ahora automáticamente durante la compilación y se rellenan
-// con valores definidos en las propiedades del proyecto. Para obtener detalles acerca
-// de los atributos que se incluyen y cómo personalizar este proceso, consulte https://aka.ms/assembly-info-properties
+namespace Salon_Api.Services
+{
+    public class CuponesService : ICuponesService
+    {
+        private readonly ApplicationDbContext _context;
 
+        public CuponesService(ApplicationDbContext context)
+        {
+            _context = context;
+        }
 
-// Al establecer ComVisible en false, se consigue que los tipos de este ensamblado
-// no sean visibles para los componentes COM. Si tiene que acceder a un tipo en este
-// ensamblado desde COM, establezca el atributo ComVisible en true en ese tipo.
+        public async Task<CuponDto?> GetCuponPorCodigo(string codigo)
+        {
+            var c = await _context.Cupones.FirstOrDefaultAsync(x => x.Codigo == codigo);
+            if (c == null) return null;
+            return new CuponDto
+            {
+                Id = c.Id,
+                Codigo = c.Codigo,
+                Descuento = c.Descuento,
+                Estado = c.Estado
+            };
+        }
 
-[assembly: ComVisible(false)]
+        public async Task<CuponDto> CrearCupon(Cupon cupon)
+        {
+            _context.Cupones.Add(cupon);
+            await _context.SaveChangesAsync();
+            return new CuponDto
+            {
+                Id = cupon.Id,
+                Codigo = cupon.Codigo,
+                Descuento = cupon.Descuento,
+                Estado = cupon.Estado
+            };
+        }
 
-// El siguiente GUID es para el identificador de typelib, si este proyecto se expone
-// en COM.
-
-[assembly: Guid("c70a11e8-c016-421f-acbd-e58f44b89de5")]
+        public async Task<CuponDto?> ActualizarCupon(int id, Cupon cupon)
+        {
+            var existente = await _context.Cupones.FindAsync(id);
+            if (existente == null) return null;
+            existente.Codigo = cupon.Codigo;
+            existente.Descuento = cupon.Descuento;
+            existente.Estado = cupon.Estado;
+            await _context.SaveChangesAsync();
+            return new CuponDto
+            {
+                Id = existente.Id,
+                Codigo = existente.Codigo,
+                Descuento = existente.Descuento,
+                Estado = existente.Estado
+            };
+        }
+    }
+}

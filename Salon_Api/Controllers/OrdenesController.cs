@@ -1,18 +1,56 @@
-using System.Runtime.InteropServices;
+using Microsoft.AspNetCore.Mvc;
+using Salon_Api.Services.Interfaces;
+using Salon_Api.DTO;
+using Salon_Api.Modelo;
 
-// En proyectos de estilo SDK como este, varios atributos de ensamblado que definían
-// en este archivo se agregan ahora automáticamente durante la compilación y se rellenan
-// con valores definidos en las propiedades del proyecto. Para obtener detalles acerca
-// de los atributos que se incluyen y cómo personalizar este proceso, consulte https://aka.ms/assembly-info-properties
+namespace Salon_Api.Controllers
+{
+    [ApiController]
+    [Route("api/[controller]")]
+    public class OrdenesController : ControllerBase
+    {
+        private readonly IOrdenesService _service;
 
+        public OrdenesController(IOrdenesService service)
+        {
+            _service = service;
+        }
 
-// Al establecer ComVisible en false, se consigue que los tipos de este ensamblado
-// no sean visibles para los componentes COM. Si tiene que acceder a un tipo en este
-// ensamblado desde COM, establezca el atributo ComVisible en true en ese tipo.
+        [HttpGet]
+        public async Task<IActionResult> GetOrdenes()
+        {
+            var list = await _service.GetOrdenes();
+            return Ok(list);
+        }
 
-[assembly: ComVisible(false)]
+        [HttpGet("/api/usuarios/{usuarioId}/ordenes")]
+        public async Task<IActionResult> GetOrdenesPorUsuario(int usuarioId)
+        {
+            var list = await _service.GetOrdenesPorUsuario(usuarioId);
+            return Ok(list);
+        }
 
-// El siguiente GUID es para el identificador de typelib, si este proyecto se expone
-// en COM.
+        [HttpPost]
+        public async Task<IActionResult> CrearOrden([FromBody] Orden orden)
+        {
+            var created = await _service.CrearOrden(orden);
+            return CreatedAtAction(nameof(GetOrdenById), new { id = created.Id }, created);
+        }
 
-[assembly: Guid("05c84a8f-732c-4b9c-ab8a-37b5788d5293")]
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetOrdenById(int id)
+        {
+            var orden = await _service.GetOrdenPorId(id);
+            if (orden == null) return NotFound();
+            return Ok(orden);
+        }
+
+        [HttpPut("{id}/estado")]
+        public async Task<IActionResult> ActualizarEstado(int id, [FromBody] string nuevoEstado)
+        {
+            var ok = await _service.ActualizarEstado(id, nuevoEstado);
+            if (!ok) return NotFound();
+            return NoContent();
+        }
+    }
+}
