@@ -1,54 +1,54 @@
-using Microsoft.EntityFrameworkCore; // Requerido para DBContext y MySQL
-using EcommerceApi.Data; // Requerido para ApplicationDbContext
-using EcommerceApi.Services; // Necesario para acceder a ArticuloService y AuthService (tal como lo definiste)
-using EcommerceApi.Services.Interfaces; // Requerido para inyectar los servicios I...Service
+using Microsoft.EntityFrameworkCore;
+using EcommerceApi.Data;
+using EcommerceApi.Services;
+using EcommerceApi.Services.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // ***************************************************************
-// 1. CONFIGURACIÓN DE SERVICIOS
+// 1. CONFIGURACIÓN DE LA BASE DE DATOS
 // ***************************************************************
 
-// 1.1 Conexión a MySQL (Entity Framework Core)
-// NOTA: Asegúrate de que la cadena de conexión 'DefaultConnection' esté definida en appsettings.json
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+// AQUI ESTÁ EL CAMBIO: Busca "MySqlConnection" en lugar de "DefaultConnection"
+var connectionString = builder.Configuration.GetConnectionString("MySqlConnection");
 
-// Paquete NuGet requerido: Pomelo.EntityFrameworkCore.MySql
+// Configuración de Entity Framework Core con MySQL (Pomelo)
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString))
 );
 
-// 1.2 INYECCIÓN DE DEPENDENCIA DE SERVICIOS CORE (Base de datos)
-// Usamos AddScoped para los servicios que interactúan con el DBContext
+// ***************************************************************
+// 2. INYECCIÓN DE DEPENDENCIA DE SERVICIOS
+// ***************************************************************
+
+// Servicios Core (Ya estaban bien)
 builder.Services.AddScoped<IClientesService, ClientesService>();
 builder.Services.AddScoped<IOrdenesService, OrdenesService>();
 builder.Services.AddScoped<IFacturasService, FacturasService>();
 builder.Services.AddScoped<ICuponesService, CuponesService>();
 
-// 1.3 INYECCIÓN DE DEPENDENCIA DE SERVICIOS DE SIMULACIÓN (del snippet que proveiste)
-// Usamos AddSingleton/AddScoped/AddTransient dependiendo del ciclo de vida.
-builder.Services.AddSingleton<ArticuloService>();
-builder.Services.AddSingleton<AuthService>();
+// Servicios de Artículos y Autenticación
+// CAMBIO IMPORTANTE: Se cambian a 'AddScoped' porque ahora usan la base de datos.
+// Si los dejas como 'Singleton' te darán un error al intentar acceder al DBContext.
+builder.Services.AddScoped<ArticuloService>();
+builder.Services.AddScoped<AuthService>();
+
+// ***************************************************************
+// 3. CONFIGURACIÓN DE LA API
+// ***************************************************************
 
 builder.Services.AddControllers();
 
-// Opcional: Configuración de Swagger/OpenAPI para documentación de la API
+// Configuración de Swagger/OpenAPI
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-
-// ***************************************************************
-// 2. CONSTRUCCIÓN DE LA APLICACIÓN
-// ***************************************************************
-
 var app = builder.Build();
 
-
 // ***************************************************************
-// 3. MIDDLEWARE (HTTP request pipeline)
+// 4. MIDDLEWARE (Pipeline de Peticiones HTTP)
 // ***************************************************************
 
-// Configuración de Swagger solo en desarrollo
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -58,11 +58,10 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-// Asegúrate de que el middleware de enrutamiento esté antes de MapControllers
 app.UseRouting();
 
-app.UseAuthorization(); // Usar autenticación y autorización
+app.UseAuthorization();
 
-app.MapControllers(); // Mapea los controladores (endpoints)
+app.MapControllers();
 
 app.Run();
