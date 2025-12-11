@@ -10,6 +10,7 @@ namespace EcommerceApi.Data
         {
         }
 
+        // DbSets (Tablas en C#)
         public DbSet<Articulo> Articulos { get; set; } = null!;
         public DbSet<Categoria> Categorias { get; set; } = null!;
         public DbSet<Cliente> Clientes { get; set; } = null!;
@@ -26,7 +27,9 @@ namespace EcommerceApi.Data
         {
             base.OnModelCreating(modelBuilder);
 
-            // 1. MAPEO DE TABLAS (Singular)
+            // =================================================================
+            // 1. MAPEO DE NOMBRES DE TABLAS (Singular)
+            // =================================================================
             modelBuilder.Entity<Articulo>().ToTable("articulo");
             modelBuilder.Entity<Categoria>().ToTable("categoria");
             modelBuilder.Entity<Cliente>().ToTable("cliente");
@@ -39,65 +42,81 @@ namespace EcommerceApi.Data
             modelBuilder.Entity<ArticuloCategoria>().ToTable("articulo_categoria");
             modelBuilder.Entity<Foto>().ToTable("foto");
 
-            // 2. MAPEO DE COLUMNAS (Para arreglar el error PagaItbms y otros futuros)
+            // =================================================================
+            // 2. MAPEO DE COLUMNAS (Correcciones específicas)
+            // =================================================================
 
-            // Articulo
+            // --- USUARIO (Corrección de Username y Contrasena) ---
+            modelBuilder.Entity<Usuario>(entity =>
+            {
+                // Mapea la propiedad C# 'Username' a la columna SQL 'usuario'
+                entity.Property(u => u.Username).HasColumnName("usuario");
+
+                // Mapea la propiedad C# 'Contrasena' a la columna SQL 'contrasena'
+                entity.Property(u => u.Contrasena).HasColumnName("contrasena");
+
+                entity.Property(u => u.ClienteId).HasColumnName("cliente_id");
+                entity.Property(u => u.Rol).HasColumnName("rol");
+
+                // Si tienes fechas en tu modelo, asegúrate de mapearlas también si difieren
+                // entity.Property(u => u.CreatedAt).HasColumnName("created_at");
+            });
+
+            // --- ARTICULO ---
             modelBuilder.Entity<Articulo>()
                 .Property(a => a.PagaItbms).HasColumnName("paga_itbms");
 
-            // Categoria
+            // --- CATEGORIA ---
             modelBuilder.Entity<Categoria>()
                 .Property(c => c.CategoriaPadreId).HasColumnName("categoria_padre_id");
 
-            // Usuario
-            modelBuilder.Entity<Usuario>()
-                .Property(u => u.ClienteId).HasColumnName("cliente_id");
+            // --- ORDEN ---
+            modelBuilder.Entity<Orden>(entity =>
+            {
+                entity.Property(o => o.UsuarioId).HasColumnName("usuario_id");
+                entity.Property(o => o.CuponId).HasColumnName("cupon_id");
+                // Conversión de Enum a String para el estado
+                entity.Property(o => o.Estado).HasConversion<string>();
+            });
 
-            // Orden
-            modelBuilder.Entity<Orden>()
-                .Property(o => o.UsuarioId).HasColumnName("usuario_id");
-            modelBuilder.Entity<Orden>()
-                .Property(o => o.CuponId).HasColumnName("cupon_id");
-            modelBuilder.Entity<Orden>()
-                .Property(o => o.Estado).HasConversion<string>(); // Para que el string funcione como enum si es necesario
+            // --- ORDEN DETALLE ---
+            modelBuilder.Entity<OrdenDetalle>(entity =>
+            {
+                entity.Property(od => od.OrdenId).HasColumnName("orden_id");
+                entity.Property(od => od.ArticuloId).HasColumnName("articulo_id");
+                entity.Property(od => od.PrecioUnitario).HasColumnName("precio_unitario");
+                entity.Property(od => od.PrecioFinal).HasColumnName("precio_final");
+            });
 
-            // OrdenDetalle
-            modelBuilder.Entity<OrdenDetalle>()
-                .Property(od => od.OrdenId).HasColumnName("orden_id");
-            modelBuilder.Entity<OrdenDetalle>()
-                .Property(od => od.ArticuloId).HasColumnName("articulo_id");
-            modelBuilder.Entity<OrdenDetalle>()
-                .Property(od => od.PrecioUnitario).HasColumnName("precio_unitario");
-            modelBuilder.Entity<OrdenDetalle>()
-                .Property(od => od.PrecioFinal).HasColumnName("precio_final");
+            // --- FACTURA ---
+            modelBuilder.Entity<Factura>(entity =>
+            {
+                entity.Property(f => f.UsuarioId).HasColumnName("usuario_id");
+                entity.Property(f => f.CuponId).HasColumnName("cupon_id");
+            });
 
-            // Factura
-            modelBuilder.Entity<Factura>()
-                .Property(f => f.UsuarioId).HasColumnName("usuario_id");
-            modelBuilder.Entity<Factura>()
-                .Property(f => f.CuponId).HasColumnName("cupon_id");
+            // --- FACTURA DETALLE ---
+            modelBuilder.Entity<FacturaDetalle>(entity =>
+            {
+                entity.Property(fd => fd.FacturaId).HasColumnName("factura_id");
+                entity.Property(fd => fd.ArticuloId).HasColumnName("articulo_id");
+                entity.Property(fd => fd.PrecioUnitario).HasColumnName("precio_unitario");
+                entity.Property(fd => fd.PrecioFinal).HasColumnName("precio_final");
+            });
 
-            // FacturaDetalle
-            modelBuilder.Entity<FacturaDetalle>()
-                .Property(fd => fd.FacturaId).HasColumnName("factura_id");
-            modelBuilder.Entity<FacturaDetalle>()
-                .Property(fd => fd.ArticuloId).HasColumnName("articulo_id");
-            modelBuilder.Entity<FacturaDetalle>()
-                .Property(fd => fd.PrecioUnitario).HasColumnName("precio_unitario");
-            modelBuilder.Entity<FacturaDetalle>()
-                .Property(fd => fd.PrecioFinal).HasColumnName("precio_final");
+            // --- FOTO ---
+            modelBuilder.Entity<Foto>(entity =>
+            {
+                entity.Property(f => f.ArticuloId).HasColumnName("articulo_id");
+                entity.Property(f => f.FotoPrincipal).HasColumnName("foto_principal");
+            });
 
-            // Foto
-            modelBuilder.Entity<Foto>()
-                .Property(f => f.ArticuloId).HasColumnName("articulo_id");
-            modelBuilder.Entity<Foto>()
-                .Property(f => f.FotoPrincipal).HasColumnName("foto_principal");
-
-            // ArticuloCategoria
-            modelBuilder.Entity<ArticuloCategoria>()
-                .Property(ac => ac.IdArticulo).HasColumnName("id_articulo");
-            modelBuilder.Entity<ArticuloCategoria>()
-                .Property(ac => ac.IdCategoria).HasColumnName("id_categoria");
+            // --- ARTICULO CATEGORIA ---
+            modelBuilder.Entity<ArticuloCategoria>(entity =>
+            {
+                entity.Property(ac => ac.IdArticulo).HasColumnName("id_articulo");
+                entity.Property(ac => ac.IdCategoria).HasColumnName("id_categoria");
+            });
         }
     }
 }
