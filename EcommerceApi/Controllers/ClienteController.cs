@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using EcommerceApi.Models; // Namespace Correcto
-using EcommerceApi.Services.Interfaces; // Namespace Correcto
+using EcommerceApi.Models;
+using EcommerceApi.Services.Interfaces;
 using EcommerceApi.DTOs;
 
 namespace EcommerceApi.Controllers
@@ -19,32 +19,16 @@ namespace EcommerceApi.Controllers
         [HttpGet]
         public async Task<IActionResult> GetClientes()
         {
-            try
-            {
-                var clientes = await _clientesService.ObtenerClientes();
-                return Ok(clientes);
-            }
-            catch
-            {
-                return BadRequest(new { mensaje = "Ocurrió un error al obtener los clientes. Intenta nuevamente." });
-            }
+            var clientes = await _clientesService.ObtenerClientes();
+            return Ok(clientes);
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetCliente(int id)
         {
-            try
-            {
-                var cliente = await _clientesService.ObtenerClientePorId(id);
-                if (cliente == null)
-                    return NotFound(new { mensaje = "Cliente no encontrado." });
-
-                return Ok(cliente);
-            }
-            catch
-            {
-                return BadRequest(new { mensaje = "Ocurrió un error al obtener el cliente. Intenta nuevamente." });
-            }
+            var cliente = await _clientesService.ObtenerClientePorId(id);
+            if (cliente == null) return NotFound(new { mensaje = "Cliente no encontrado." });
+            return Ok(cliente);
         }
 
         [HttpPost]
@@ -53,48 +37,29 @@ namespace EcommerceApi.Controllers
             try
             {
                 var clienteCreado = await _clientesService.CrearCliente(dto);
-                return CreatedAtAction(nameof(GetCliente),
-                    new { id = clienteCreado.IdCliente },
-                    clienteCreado);
+                // CORREGIDO: Se usa 'Id' en lugar de 'IdCliente'
+                return CreatedAtAction(nameof(GetCliente), new { id = clienteCreado.Id }, clienteCreado);
             }
-            catch
+            catch (Exception ex)
             {
-                return BadRequest(new { mensaje = "Ocurrió un error al crear el cliente. Intenta nuevamente." });
+                return BadRequest(new { mensaje = ex.Message });
             }
         }
 
         [HttpPut("{id}")]
         public async Task<IActionResult> ActualizarCliente(int id, [FromBody] ClienteCreateDto dto)
         {
-            try
-            {
-                var clienteActualizado = await _clientesService.ActualizarCliente(id, dto);
-                if (clienteActualizado == null)
-                    return NotFound(new { mensaje = "Cliente no encontrado." });
-
-                return NoContent();
-            }
-            catch
-            {
-                return BadRequest(new { mensaje = "Ocurrió un error al actualizar el cliente. Intenta nuevamente." });
-            }
+            var clienteActualizado = await _clientesService.ActualizarCliente(id, dto);
+            if (clienteActualizado == null) return NotFound();
+            return NoContent();
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> EliminarCliente(int id)
         {
-            try
-            {
-                var result = await _clientesService.EliminarCliente(id);
-                if (!result)
-                    return NotFound(new { mensaje = "Cliente no encontrado." });
-
-                return NoContent();
-            }
-            catch
-            {
-                return BadRequest(new { mensaje = "Ocurrió un error al eliminar el cliente. Intenta nuevamente." });
-            }
+            var result = await _clientesService.EliminarCliente(id);
+            if (!result) return NotFound();
+            return NoContent();
         }
     }
 }
