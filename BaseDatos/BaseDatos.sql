@@ -1,15 +1,15 @@
--- 1. CREACIÓN DE LA BASE DE DATOS
+-- ***************************************************************
+-- 1. CREACIÓN Y SELECCIÓN DE LA BASE DE DATOS
+-- ***************************************************************
 CREATE DATABASE IF NOT EXISTS ecommerce_db CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-
--- 2. SELECCIÓN DE LA BASE DE DATOS
 USE ecommerce_db;
 
 -- Establecer el delimitador para permitir la creación de TRIGGERS
 DELIMITER $$
 
--- -----------------------------------------------------
--- 3. Definición de Tablas (Cláusula VISIBLE ELIMINADA)
--- -----------------------------------------------------
+-- ***************************************************************
+-- 2. DEFINICIÓN DE TABLAS
+-- ***************************************************************
 
 -- Tabla: cliente
 CREATE TABLE IF NOT EXISTS cliente (
@@ -327,3 +327,75 @@ END$$
 
 -- 4. RESTAURAR DELIMITADOR
 DELIMITER ;
+
+
+-- ***************************************************************
+-- 3. INSERCIÓN DE DATOS DE PRUEBA (POBLAMIENTO)
+-- ***************************************************************
+-- Restaurar delimitador a ; para las inserciones simples
+DELIMITER ;
+
+-- 1. Clientes
+INSERT INTO cliente (nombre, apellido, direccion, telefono, correo) VALUES
+('Ana', 'García', 'Vía España, PH El Sol, Apt. 5A', '6012-3456', 'ana.garcia@tienda.com'),
+('Roberto', 'Méndez', 'Avenida Central, Edif. Luna', '6543-2109', 'roberto.mendez@tienda.com');
+
+-- 2. Usuarios
+INSERT INTO usuario (usuario, contrasena, rol, cliente_id) VALUES
+('admin', 'hash_admin123', 'admin', NULL), -- id=1
+('ana.garcia@tienda.com', 'hash_ana123', 'cliente', 1), -- id=2
+('roberto.mendez@tienda.com', 'hash_roberto123', 'cliente', 2); -- id=3
+
+-- 3. Categorías
+INSERT INTO categoria (nombre, categoria_padre_id) VALUES
+('Electrónica', NULL),    -- id=1
+('Ropa', NULL),           -- id=2
+('Laptops', 1),           -- id=3 (Subcategoría de Electrónica)
+('Camisetas', 2),         -- id=4 (Subcategoría de Ropa)
+('Smartphones', 1);       -- id=5 (Subcategoría de Electrónica)
+
+-- 4. Artículos
+INSERT INTO articulo (nombre, descripcion, precio, stock, paga_itbms) VALUES
+('Laptop Pro X', 'Portátil de alto rendimiento', 1500.00, 10, TRUE), -- id=1
+('Teclado Mecánico', 'Teclado RGB para gamers', 85.50, 25, TRUE),     -- id=2
+('Camiseta Algodón', 'Camiseta básica 100% algodón', 15.00, 100, FALSE), -- id=3
+('Smartphone Z', 'Último modelo de teléfono inteligente', 800.00, 15, TRUE); -- id=4
+
+-- 5. Artículos - Categoría (articulo_categoria)
+INSERT INTO articulo_categoria (id_articulo, id_categoria) VALUES
+(1, 1), (1, 3), -- Laptop Pro X
+(2, 1),         -- Teclado Mecánico
+(3, 2), (3, 4), -- Camiseta Algodón
+(4, 1), (4, 5); -- Smartphone Z
+
+-- 6. Fotos
+INSERT INTO foto (articulo_id, foto_principal, foto_2) VALUES
+(1, 'url_img/laptop_main.jpg', 'url_img/laptop_lado.jpg'),
+(2, 'url_img/teclado_main.jpg', NULL),
+(3, 'url_img/camiseta_main.jpg', 'url_img/camiseta_modelo.jpg'),
+(4, 'url_img/smarthphone_main.jpg', NULL);
+
+-- 7. Cupones
+INSERT INTO cupon (codigo, descuento, estado) VALUES
+('DESCUENTO10', 0.10, TRUE),   -- id=1
+('ENVIOFREE', 0.00, TRUE),     -- id=2
+('OLDCODE', 0.20, FALSE);      -- id=3
+
+-- 8. Orden (Para Ana García, usuario_id=2)
+-- 1x Laptop (1500) + 2x Teclado (171). Subtotal=1671.00. Desc=167.10 (10%). ITBMS=116.97. Total=1620.87
+INSERT INTO orden (estado, fecha, usuario_id, cupon_id, subtotal, total, descuento, itbms) VALUES
+('completada', NOW(), 2, 1, 1671.00, 1620.87, 167.10, 116.97); -- id=1
+
+-- 9. Orden Detalle (Productos de la orden 1)
+INSERT INTO orden_detalle (orden_id, articulo_id, cantidad, precio_unitario, precio_final) VALUES
+(1, 1, 1, 1500.00, 1500.00), -- 1x Laptop Pro X
+(1, 2, 2, 85.50, 171.00);    -- 2x Teclado Mecánico
+
+-- 10. Factura (Factura correspondiente a la Orden 1)
+INSERT INTO factura (cupon_id, subtotal, descuento, total, fecha, itbms, usuario_id) VALUES
+(1, 1671.00, 167.10, 1620.87, NOW(), 116.97, 2); -- id=1
+
+-- 11. Factura Detalle
+INSERT INTO factura_detalle (articulo_id, precio_final, factura_id, precio_unitario) VALUES
+(1, 1500.00, 1, 1500.00),
+(2, 171.00, 1, 85.50);
