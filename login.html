@@ -1,111 +1,59 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Iniciar Sesión - Distribuidora22</title>
-    <link rel="stylesheet" href="CSS/style.css">
-</head>
+    <title>Login - Distribuidora 22</title>
 
+    <link rel="stylesheet" href="CSS/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+</head>
 <body>
 
-<header class="header">
-    <img class="bg" src="" alt="">
-
-    <div class="menu container">
-        <a href="index.html" class="logo">Distribuidora22</a>
-
-        <input type="checkbox" id="menu">
-        <label for="menu"><img src="IMG/logo.png" class="menu-icono" alt=""></label>
-
-        <nav class="navbar">
-            <ul>
-                <li><a href="index.html">Inicio</a></li>
-                <li><a href="productos.html">Productos</a></li>
+    <nav class="navbar">
+        <div class="nav-logo">
+            <img src="IMG/logo.png" alt="Logo Distribuidora 22" />
+        </div>
+        <ul class="nav-links">
+            <li><a href="index.html">Inicio</a></li>
+            <li><a href="productos.html">Productos</a></li>
+            
+        </ul>
+        <div class="nav-actions">
+            <a href="registrarse.html" class="nav-btn">Registrarse</a>
+        </div>
+    </nav>
+    <main class="auth-main-content">
+        <div class="auth-box">
+            <h2 class="section-title">Iniciar Sesión</h2>
+            <p class="auth-subtitle">Accede a tu cuenta para continuar comprando.</p>
+            
+            <form id="login-form" class="auth-form">
                 
-                <li class="cart-icon">
-                    <a href="carrito.html" aria-label="Carrito">
-                        <svg width="26" height="26" viewBox="0 0 24 24" aria-hidden="true">
-                            <path d="M6 6h15l-2 9H8L6 6zm0 0H3"
-                                stroke="#5E925C" stroke-width="2" fill="none"
-                                stroke-linecap="round" stroke-linejoin="round"/>
-                            <circle cx="10" cy="19" r="1" fill="#5E925C"/>
-                            <circle cx="17" cy="19" r="1" fill="#5E925C"/>
-                        </svg>
-                        <span id="cart-count">0</span>
-                    </a>
-                </li>
-
-                <li class="login-icon" id="user-area">
-                    <a href="login.html" aria-label="Iniciar Sesión" id="login-link">
-                        <svg viewBox="0 0 24 24" width="26" height="26">
-                            <circle cx="12" cy="7" r="4" stroke="#5E925C" stroke-width="2" fill="none"/>
-                            <path d="M4 20c0-4 4-6 8-6s8 2 8 6"
-                                stroke="#5E925C" stroke-width="2" fill="none" stroke-linecap="round"/>
-                        </svg>
-                    </a>
-                </li>
-            </ul>
-        </nav>
-    </div>
-</header>
-
-<main class="login-main">
-    <section class="login-section">
-        <div class="login-card">
-
-            <h2>Iniciar Sesión</h2>
-            <p>Accede para Comprar.</p>
-
-            <form id="login-form">
+                <div class="form-group">
+                    <label for="login-email">Correo Electrónico:</label>
+                    <input type="email" id="login-email" required>
+                </div>
                 
-                <label class="login-label">Correo electrónico</label>
-                <input type="email" id="login-email" class="login-input" required placeholder="Ej: usuario@gmail.com">
-
-                <label class="login-label">Contraseña</label>
-                <input type="password" id="login-pass" class="login-input" required placeholder="••••••••">
-
-                <button type="submit" class="login-btn">Entrar</button>
-
-                <p class="login-register">
-                    <a href="registrarse.html">¿No tienes cuenta? Regístrate aquí</a>
-                </p>
-
+                <div class="form-group">
+                    <label for="login-pass">Contraseña:</label>
+                    <input type="password" id="login-pass" required>
+                </div>
+                
+                <button type="submit" class="login-btn">Acceder</button>
+                
+                <div class="auth-footer-link">
+                    <p>¿No tienes cuenta? <a href="registrarse.html">Regístrate aquí</a></p>
+                </div>
             </form>
+        </div>
+    </main>
+    <footer class="footer">
+        <p class="footer-copy-final">© 2025 Distribuidora 22 — Todos los derechos reservados</p>
+    </footer>
 
-        </div>
-    </section>
-</main>
-
-<footer class="footer container">
-    <div class="footer-links">
-        <div class="link">
-            <h3>Contactos</h3>
-            <ul>
-                <li><strong>Teléfono:</strong> +507 6501-2234</li>
-                <li><strong>WhatsApp:</strong> +507 6889-4410</li>
-                <li><strong>Correo:</strong> distribuidora.info@gmail.com</li>
-                <li><strong>Dirección:</strong> Panamá, Ciudad de Panamá</li>
-            </ul>
-        </div>
-        <div class="link">
-            <h3>Redes sociales</h3>
-            <ul>
-                <li><a href="#">Instagram | @Distribuidora22.com</a></li>
-                <li><a href="#">TikTok | @Distribuidora22.com</a></li>
-            </ul>
-        </div>
-        <div class="link">
-            <h3>Sucursales</h3>
-            <ul>
-                <li><a href="#">24 De Diciembre| 8am a 4:30pm</a></li>
-            </ul>
-        </div>
-    </div>
-</footer>
-
-<script src="JS/config.js"></script>
-<script src="JS/login.js"></script>
+    <script src="JS/config.js"></script>
+    <script src="JS/login.js"></script>
 
 </body>
 </html>

@@ -1,129 +1,101 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="es">
-  <head>
+<head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Productos - Distribuidora22</title>
+    <title>Productos - Distribuidora 22</title>
+
     <link rel="stylesheet" href="CSS/style.css" />
-  </head>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+</head>
 
-  <body>
-    <header class="header">
-      <img class="bg" src="Imagen/bg.svg" alt="" />
+<body>
 
-      <div class="menu container">
-        <a href="index.html" class="logo">Distribuidora22</a>
+    <nav class="navbar">
+        <div class="nav-logo">
+            <img src="IMG/logo.png" alt="Logo Distribuidora 22" />
+        </div>
 
-        <input type="checkbox" id="menu" />
-        <label for="menu">
-          <img src="Imagen/menu.svg" class="menu-icono" alt="menu" />
-        </label>
-
-        <nav class="navbar">
-          <ul>
+        <ul class="nav-links">
             <li><a href="index.html">Inicio</a></li>
-            <li><a href="productos.html">Productos</a></li>
+            <li><a href="productos.html" class="active">Productos</a></li>
+            
+        </ul>
 
-            <li class="cart-icon">
-              <a href="carrito.html" aria-label="Carrito">
-                <svg width="26" height="26" viewBox="0 0 24 24">
-                  <path 
-                    d="M6 6h15l-2 9H8L6 6zm0 0H3"
-                    stroke="#2c6e49"
-                    stroke-width="2"
-                    fill="none"
-                    stroke-linecap="round"
-                  />
-                  <circle cx="10" cy="19" r="1" fill="#2c6e49"/>
-                  <circle cx="17" cy="19" r="1" fill="#2c6e49"/>
+        <div class="nav-actions">
+            <a href="login.html" class="nav-btn">Login</a>
+            <a href="registrarse.html" class="nav-btn">Registrarse</a>
+
+            <a href="carrito.html" class="cart-icon">
+                <svg width="30" height="30" viewBox="0 0 24 24">
+                    <path d="M6 6h15l-2 9H8L6 6zm0 0H3"
+                        stroke="#5E925C" stroke-width="2" fill="none"
+                        stroke-linecap="round" stroke-linejoin="round" />
+                    <circle cx="10" cy="19" r="1" fill="#5E925C" />
+                    <circle cx="17" cy="19" r="1" fill="#5E925C" />
                 </svg>
                 <span id="cart-count">0</span>
-              </a>
-            </li>
-
-            <li class="login-icon" id="user-area">
-              <a href="login.html" aria-label="Iniciar Sesión" id="login-link">
-                <svg viewBox="0 0 24 24" width="26" height="26">
-                  <circle cx="12" cy="7" r="4" stroke="#2c6e49" stroke-width="2" fill="none"/>
-                  <path 
-                    d="M4 20c0-4 4-6 8-6s8 2 8 6"
-                    stroke="#2c6e49"
-                    stroke-width="2"
-                    fill="none"
-                    stroke-linecap="round"
-                  />
-                </svg>
-              </a>
-            </li>
-          </ul>
-        </nav>
-      </div>
-    </header>
-
-    <main class="products container">
-      <h2>Lista de Productos</h2>
-
-      <div class="service-list">
-          <p style="text-align: center; width: 100%; font-weight: bold;">Cargando catálogo...</p>
-      </div>
+            </a>
+        </div>
+    </nav>
+    <main class="products-main-content">
+        <h2 class="section-title">Nuestra Selección de Productos</h2>
+        
+        <section class="products-grid service-list">
+            <p style="text-align: center; width: 100%; font-weight: bold; color: #555;">Cargando catálogo...</p>
+        </section>
     </main>
+    <footer class="footer">
+        <div class="footer-container">
 
-    <footer class="footer container">
-      <div class="footer-links">
+            <div class="footer-column">
+                <h3>Contactos</h3>
+                <div class="footer-social">
+                    <img src="IMG/icon-phone.png" alt="Teléfono">
+                    <span>+507 6501-2234</span>
+                </div>
+                <div class="footer-social">
+                    <img src="IMG/icon-whatsapp.png" alt="WhatsApp">
+                    <span>+507 6889-4410</span>
+                </div>
+                <div class="footer-social">
+                    <img src="IMG/icon-instagram.png" alt="Instagram">
+                    <span>@distribuidora22</span>
+                </div>
+                <p class="footer-mail"><strong>Correo:</strong> distribuidora.22@gmail.com</p>
+                <p class="footer-direction"><strong>Dirección:</strong> Panamá, Ciudad de Panamá</p>
+            </div>
 
-        <div class="link">
-          <h3>Contacto</h3>
-          <ul>
-            <li><strong>Teléfono:</strong> +507 6501-2234</li>
-            <li><strong>WhatsApp:</strong> +507 6889-4410</li>
-            <li><strong>Correo:</strong> distribuidora.info@gmail.com</li>
-            <li><strong>Dirección:</strong> Panamá, Ciudad de Panamá</li>
-          </ul>
+            <div class="footer-column">
+                <h3>Servicios</h3>
+                <p>Distribución y Entregas</p>
+                <p>Almacenamiento y Logística</p>
+                <p>Suministro a Minisúpers</p>
+                <p>Atención Comercial</p>
+            </div>
+
+            <div class="footer-column">
+                <h3>Categorías</h3>
+                <p><a class="footer-link" href="#">Ropa</a></p>
+                <p><a class="footer-link" href="#">Tecnología</a></p>
+                <p><a class="footer-link" href="#">Alimentos</a></p>
+                <p><a class="footer-link" href="#">Accesorios</a></p>
+                <p><a class="footer-link" href="#">Autos y Herramientas</a></p>
+            </div>
+
+            <div class="footer-column">
+                <h3>Sucursales</h3>
+                <p>24 de Diciembre — 8am a 4pm</p>
+            </div>
+
         </div>
 
-        <div class="link">
-          <h3>Redes Sociales</h3>
-          <ul>
-            <li><a href="#">Instagram | @Distribuidora22.com</a></li>
-            <li><a href="#">TikTok | @Distribuidora22.com</a></li>
-          </ul>
-        </div>
-
-        <div class="link">
-          <h3>Categorías</h3>
-          <ul>
-            <li><a href="#">Ropa</a></li>
-            <li><a href="#">Tecnología</a></li>
-            <li><a href="#">Alimentos</a></li>
-            <li><a href="#">Accesorios</a></li>
-            <li><a href="#">Autos y Herramientas</a></li>
-          </ul>
-        </div>
-
-        <div class="link">
-          <h3>Sucursales</h3>
-          <ul>
-            <li>24 De Diciembre| 8am a 4:30pm</li>
-          </ul>
-        </div>
-
-      </div>
+        <p class="footer-copy-final">© 2025 Distribuidora 22 — Todos los derechos reservados</p>
     </footer>
-
     <script src="JS/config.js"></script>
     <script src="JS/session.js"></script>
     <script src="JS/productos.js"></script>
     <script src="JS/carrito.js"></script>
 
-    <script>
-      window.addEventListener("scroll", function () {
-        if (window.scrollY > 20) {
-          document.body.classList.add("scrolled");
-        } else {
-          document.body.classList.remove("scrolled");
-        }
-      });
-    </script>
-
-  </body>
+</body>
 </html>

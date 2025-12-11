@@ -1,4 +1,6 @@
-# Build results
+ # =======================================================
+# ARTEFACTOS DE COMPILACIÓN (Build Results)
+# =======================================================
 [Dd]ebug/
 [Dd]ebugPublic/
 [Rr]elease/
@@ -14,19 +16,25 @@ bld/
 [Ll]og/
 [Ll]ogs/
 
-# Visual Studio cache/options
+# =======================================================
+# CACHE Y OPCIONES DE VISUAL STUDIO / VS CODE
+# =======================================================
 .vs/
 *.suo
 *.user
 *.userosscache
 *.sln.docstates
 
-# .NET Core
+# =======================================================
+# ARTEFACTOS .NET CORE
+# =======================================================
 project.lock.json
 project.fragment.lock.json
 artifacts/
 
-# Files built by Visual Studio
+# =======================================================
+# ARCHIVOS GENERADOS POR VISUAL STUDIO / MSBUILD
+# =======================================================
 *_i.c
 *_p.c
 *_h.h
@@ -54,4 +62,6 @@ artifacts/
 *.pidb
 *.svclog
 *.scc
-IMG/Laptop.png
+
+ 
+ 

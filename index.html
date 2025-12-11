@@ -1,69 +1,144 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Distribuidora 22</title>
-    <link rel="stylesheet" href="CSS/style.css">
+
+    <link rel="stylesheet" href="CSS/style.css" />
+    
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
 </head>
+
 <body>
 
-    <nav class="navbar-new">
-
-        <div class="nav-left">
-            <a href="index.html">Inicio</a>
-            <a href="productos.html">Productos</a>
-        </div>
-
+    <nav class="navbar">
         <div class="nav-logo">
-            <img src="IMG/logo.png" alt="Logo Distribuidora 22">
+            <img src="IMG/logo.png" alt="Logo Distribuidora 22" />
         </div>
 
-        <div class="nav-right">
-            
-            <div id="user-area" style="display: inline-flex; gap: 15px; align-items: center;">
-                <a href="login.html">Login</a>
-                <a href="registrarse.html">Registrarse</a>
-            </div>
+        <ul class="nav-links">
+            <li><a href="index.html" class="active">Inicio</a></li>
+            <li><a href="productos.html">Productos</a></li>
+             >
+        </ul>
 
-            <a href="carrito.html" class="cart" style="margin-left: 15px;">
+        <div class="nav-actions">
+            <a href="login.html" class="nav-btn">Login</a>
+            <a href="registrarse.html" class="nav-btn">Registrarse</a>
+
+            <a href="carrito.html" class="cart-icon">
                 <svg width="30" height="30" viewBox="0 0 24 24">
                     <path d="M6 6h15l-2 9H8L6 6zm0 0H3"
                         stroke="#5E925C" stroke-width="2" fill="none"
-                        stroke-linecap="round" stroke-linejoin="round"/>
-                    <circle cx="10" cy="19" r="1" fill="#5E925C"/>
-                    <circle cx="17" cy="19" r="1" fill="#5E925C"/>
+                        stroke-linecap="round" stroke-linejoin="round" />
+                    <circle cx="10" cy="19" r="1" fill="#5E925C" />
+                    <circle cx="17" cy="19" r="1" fill="#5E925C" />
                 </svg>
                 <span id="cart-count">0</span>
             </a>
         </div>
-
     </nav>
 
     <section class="hero">
+        <div class="slider">
+            <div class="slides fade">
+                <img src="IMG/hero1.png" alt="Hero 1 - Imagen del Slider" />
+            </div>
 
-        <div class="hero-left">
-            <img src="IMG/Imagen2.png" alt="Distribuidora 22" class="hero-logo">
+            <div class="slides fade">
+                <img src="IMG/hero2.png" alt="Hero 2 - Imagen del Slider" />
+            </div>
 
-            <p class="hero-text">
-                Abastecemos minisúpers y empresas con productos de consumo masivo.<br>
-                Logística eficiente, precios competitivos y atención profesional en todas las provincias.
-            </p>
+            <div class="slides fade">
+                <img src="IMG/hero3.png" alt="Hero 3 - Imagen del Slider" />
+            </div>
 
-            <button class="btn-catalogo" onclick="location.href='productos.html'">
-                Ver Catálogo
-            </button>
+            <div class="hero-button-container">
+                <a href="productos.html" class="hero-button">NUESTROS PRODUCTOS</a>
+            </div>
         </div>
-
-        <div class="hero-right">
-            <img src="IMG/imagen1.png" alt="Imagen Principal" class="hero-img-click">
-        </div>
-
     </section>
 
-    <script src="JS/config.js"></script>
-    <script src="JS/session.js"></script>
-    <script src="JS/carrito.js"></script>
+    <section class="servicios-section">
+        <h2>Nuestros Servicios</h2>
+
+        <div class="servicios-grid">
+
+            <div class="serv-card service-card"> <img src="IMG/servicio1.png" alt="Distribución y Entregas">
+                <h3>Distribución y Entregas</h3>
+                <p>Entregamos productos de consumo masivo con eficiencia en todas las provincias.</p>
+            </div>
+
+            <div class="serv-card service-card">
+                <img src="IMG/servicio2.png" alt="Almacenamiento y Logística">
+                <h3>Almacenamiento y Logística</h3>
+                <p>Control de inventario, bodegas equipadas y manejo eficiente de mercancía.</p>
+            </div>
+
+            <div class="serv-card service-card">
+                <img src="IMG/servicio3.png" alt="Suministro a Minisúpers">
+                <h3>Suministro a Minisúpers</h3>
+                <p>Abastecimiento constante y confiable para tu negocio o empresa.</p>
+            </div>
+
+            <div class="serv-card service-card">
+                <video src="IMG/servicio4.mp4" alt="Transporte y Carga" controls>
+                <h3>Transporte y Carga</h3>
+                <p>Flota de transporte para movimiento de productos de forma segura y rápida.</p>
+            </div>
+
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="footer-container">
+
+            <div class="footer-column">
+                <h3>Contactos</h3>
+
+                <div class="footer-social">
+                    <img src="IMG/icon-phone.png" alt="Teléfono">
+                    <span>+507 6501-2234</span>
+                </div>
+
+                <div class="footer-social">
+                    <img src="IMG/icon-whatsapp.png" alt="WhatsApp">
+                    <span>+507 6889-4410</span>
+                </div>
+
+                <div class="footer-social">
+                    <img src="IMG/icon-instagram.png" alt="Instagram">
+                    <span>@distribuidora22</span>
+                </div>
+                <p class="footer-mail"><strong>Correo:</strong> distribuidora.22@gmail.com</p>
+                <p class="footer-direction"><strong>Dirección:</strong> Panamá, Ciudad de Panamá</p>
+            </div>
+
+            <div class="footer-column">
+                <h3>Servicios</h3>
+                <p>Distribución y Entregas</p>
+                <p>Almacenamiento y Logística</p>
+                <p>Suministro a Minisúpers</p>
+                <p>Atención Comercial</p>
+            </div>
+
+            <div class="footer-column">
+                <h3>Enlaces</h3>
+                <p><a class="footer-link" href="productos.html">Productos</a></p>
+            </div>
+
+            <div class="footer-column">
+                <h3>Sucursales</h3>
+                <p>24 de Diciembre — 8am a 4pm</p>
+            </div>
+
+        </div>
+
+        <p class="footer-copy-final">© 2025 Distribuidora 22 — Todos los derechos reservados</p>
+    </footer>
+
+    <script src="JS/slider.js"></script>
 
 </body>
 </html>
