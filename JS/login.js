@@ -5,13 +5,13 @@
 document.getElementById("login-form")?.addEventListener("submit", async function (e) {
   e.preventDefault();
 
-  const email = document.querySelector("#login-form input[type=email]").value.trim();
-  const pass  = document.querySelector("#login-form input[type=password]").value.trim();
+  const correo = document.querySelector("#login-form input[type=email]").value.trim();
+  const pass   = document.querySelector("#login-form input[type=password]").value.trim();
 
-  // Datos que la API espera
+  // Lo que tu API debe recibir según tu tabla "usuario"
   const credenciales = {
-    correo: email,
-    password: pass
+    usuario: correo,        // en tu BD es campo 'usuario'
+    contrasena: pass        // en tu BD es campo 'contrasena'
   };
 
   try {
@@ -27,21 +27,21 @@ document.getElementById("login-form")?.addEventListener("submit", async function
       return;
     }
 
-    // API devuelve el usuario ya validado
+    // API devuelve la información del usuario ya autenticado
     const data = await res.json();
 
-    // Normalize user session data to consistent shape
-    // API may return: { IdCliente, Nombre, Rol } or { id, nombre, rol }
+    // Normalizar estructura de sesión según tu BD
     const normalizedUser = {
-      id: data.IdCliente || data.idCliente || data.id || null,
-      nombre: data.Nombre || data.nombre || data.name || "Usuario",
-      rol: (data.Rol || data.rol || "cliente").toLowerCase()
+      id: data.id || data.Id || data.idUsuario || null,
+      cliente_id: data.cliente_id || data.ClienteId || null,
+      nombre: data.nombre || data.Nombre || "Usuario",
+      rol: (data.rol || data.Rol || "cliente").toLowerCase()
     };
 
-    // Guardar sesión normalizada
+    // Guardar sesión del usuario
     localStorage.setItem("usuarioConectado", JSON.stringify(normalizedUser));
 
-    // Redirección
+    // Redirección según rol
     if (normalizedUser.rol === "admin") {
       window.location.href = "admin.html";
     } else {
@@ -66,3 +66,4 @@ function mostrarError(mensaje) {
   }
   errorBox.textContent = mensaje;
 }
+
