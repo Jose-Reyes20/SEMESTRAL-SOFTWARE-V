@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Salon_Api.Modelo;
-using Salon_Api.Services.Interfaces;
-using Salon_Api.DTO;
+using EcommerceApi.Models; // Namespace Correcto
+using EcommerceApi.Services.Interfaces; // Namespace Correcto
+using EcommerceApi.DTOs;
 
-namespace Salon_Api.Controllers
+namespace EcommerceApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]

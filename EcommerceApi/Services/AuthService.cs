@@ -1,61 +1,63 @@
-﻿// Services/AuthService.cs
-
+﻿/using Microsoft.EntityFrameworkCore;
+using EcommerceApi.Data;
 using EcommerceApi.DTOs;
 using EcommerceApi.Models;
+using BCrypt.Net;
 
 namespace EcommerceApi.Services
 {
     public class AuthService
     {
-        // Simulación de contexto de base de datos
-        private readonly List<Cliente> _clientes = new List<Cliente>();
-        private readonly List<Usuario> _usuarios = new List<Usuario>();
+        private readonly ApplicationDbContext _context;
 
-        // Simula la creación del cliente y el usuario
+        public AuthService(ApplicationDbContext context)
+        {
+            _context = context;
+        }
+
         public Usuario Register(UserRegisterDto dto)
         {
-            // Lógica real: Verificar si el correo ya existe.
-
             // 1. Crear Cliente
             var nuevoCliente = new Cliente
             {
-                Id = _clientes.Count + 1,
                 Nombre = dto.Nombre,
-                Correo = dto.Correo,
-                // ... otros campos
+                Apellido = dto.Apellido,
+                Direccion = dto.Direccion,
+                Telefono = dto.Telefono,
+                Correo = dto.Correo
             };
-            _clientes.Add(nuevoCliente);
+            _context.Clientes.Add(nuevoCliente);
+            _context.SaveChanges(); // Guardar para generar el ID del cliente
 
-            // 2. Crear Usuario
+            // 2. Crear Usuario vinculado
             var nuevoUsuario = new Usuario
             {
-                Id = _usuarios.Count + 1,
                 Username = dto.Correo,
-                Contrasena = "HASHED_" + dto.Contrasena, // Lógica real: Usar BCrypt/Argon2
+                Contrasena = BCrypt.Net.BCrypt.HashPassword(dto.Contrasena),
                 Rol = "cliente",
                 ClienteId = nuevoCliente.Id
             };
-            _usuarios.Add(nuevoUsuario);
+            _context.Usuarios.Add(nuevoUsuario);
+            _context.SaveChanges();
 
             return nuevoUsuario;
         }
 
-        // Simula el proceso de inicio de sesión
         public Usuario? Login(UserLoginDto dto)
         {
-            // Lógica real: 
-            // 1. Buscar el usuario por 'dto.Usuario'.
-            // 2. Comparar el hash de 'dto.Contrasena' con el hash almacenado.
+            var usuarioEncontrado = _context.Usuarios
+                .FirstOrDefault(u => u.Username == dto.Usuario);
 
-            var usuarioEncontrado = _usuarios.FirstOrDefault(u => u.Username == dto.Usuario);
+            if (usuarioEncontrado == null) return null;
 
-            if (usuarioEncontrado != null && usuarioEncontrado.Contrasena == ("HASHED_" + dto.Contrasena))
+            bool validPassword = BCrypt.Net.BCrypt.Verify(dto.Contrasena, usuarioEncontrado.Contrasena);
+
+            if (validPassword)
             {
-                // Lógica real: Generar y devolver un JWT (JSON Web Token)
                 return usuarioEncontrado;
             }
 
-            return null; // Fallo de autenticación
+            return null;
         }
     }
 }
