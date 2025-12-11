@@ -5,65 +5,84 @@
 document.getElementById("login-form")?.addEventListener("submit", async function (e) {
   e.preventDefault();
 
-  const correo = document.querySelector("#login-form input[type=email]").value.trim();
-  const pass   = document.querySelector("#login-form input[type=password]").value.trim();
+  // 1. Obtener datos por ID (Más seguro)
+  const correo = document.getElementById("login-email").value.trim();
+  const pass   = document.getElementById("login-pass").value.trim();
 
-  // Lo que tu API debe recibir según tu tabla "usuario"
+  // 2. Preparar credenciales
+  // NOTA: Aunque el usuario escriba su correo, la API espera la propiedad "usuario"
   const credenciales = {
-    usuario: correo,        // en tu BD es campo 'usuario'
-    contrasena: pass        // en tu BD es campo 'contrasena'
+    usuario: correo, 
+    contrasena: pass
   };
 
   try {
-    const res = await apiFetch("/api/Auth/login", {
+    mostrarError(""); // Limpiar errores previos
+
+    // 3. Enviar a la API
+    const res = await apiFetch("/api/auth/login", {
       method: "POST",
       body: JSON.stringify(credenciales)
     });
 
+    // 4. Manejar error de credenciales
     if (!res.ok) {
       const errorText = await res.text();
-      mostrarError(errorText || "Correo o contraseña incorrectos.");
-      console.error("Login error:", errorText);
+      try {
+          const errJson = JSON.parse(errorText);
+          mostrarError(errJson.message || "Credenciales incorrectas.");
+      } catch {
+          mostrarError("Correo o contraseña incorrectos.");
+      }
       return;
     }
 
-    // API devuelve la información del usuario ya autenticado
+    // 5. Login Exitoso
     const data = await res.json();
+    console.log("Login OK:", data);
 
-    // Normalizar estructura de sesión según tu BD
-    const normalizedUser = {
-      id: data.id || data.Id || data.idUsuario || null,
-      cliente_id: data.cliente_id || data.ClienteId || null,
-      nombre: data.nombre || data.Nombre || "Usuario",
-      rol: (data.rol || data.Rol || "cliente").toLowerCase()
+    // 6. Guardar sesión
+    const sessionData = {
+      id: data.usuarioId,
+      cliente_id: data.clienteId,
+      nombre: data.rol === 'admin' ? 'Administrador' : 'Cliente',
+      rol: data.rol,
+      token: data.token
     };
 
-    // Guardar sesión del usuario
-    localStorage.setItem("usuarioConectado", JSON.stringify(normalizedUser));
+    localStorage.setItem("usuarioConectado", JSON.stringify(sessionData));
 
-    // Redirección según rol
-    if (normalizedUser.rol === "admin") {
+    // 7. Redirigir
+    if (sessionData.rol && sessionData.rol.toLowerCase() === "admin") {
       window.location.href = "admin.html";
     } else {
       window.location.href = "index.html";
     }
 
   } catch (error) {
-    mostrarError("No se pudo conectar con la API. Verifica que el backend esté en ejecución.");
-    console.error("Connection error:", error);
+    mostrarError("Error de conexión con el servidor.");
+    console.error(error);
   }
 });
 
 function mostrarError(mensaje) {
   let errorBox = document.querySelector(".login-error");
+  
+  if (!mensaje) {
+      if (errorBox) errorBox.remove();
+      return;
+  }
+
   if (!errorBox) {
     errorBox = document.createElement("p");
     errorBox.className = "login-error";
     errorBox.style.color = "#d9534f";
-    errorBox.style.fontWeight = "700";
+    errorBox.style.fontWeight = "bold";
     errorBox.style.marginTop = "10px";
-    document.getElementById("login-form").appendChild(errorBox);
+    errorBox.style.textAlign = "center";
+    
+    const btn = document.querySelector(".login-btn");
+    if(btn) btn.parentNode.insertBefore(errorBox, btn.nextSibling);
   }
   errorBox.textContent = mensaje;
 }
-

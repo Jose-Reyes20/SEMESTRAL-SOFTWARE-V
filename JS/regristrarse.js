@@ -5,82 +5,55 @@ document.addEventListener("DOMContentLoaded", () => {
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
 
-    const nombre   = document.getElementById("reg-nombre").value.trim();
-    const apellido = document.getElementById("reg-apellido").value.trim();
+    // 1. OBTENER DATOS (Ahora coinciden 1 a 1 con el Backend)
+    const nombre    = document.getElementById("reg-nombre").value.trim();
+    const apellido  = document.getElementById("reg-apellido").value.trim();
     const direccion = document.getElementById("reg-direccion").value.trim();
-    const telefono = document.getElementById("reg-telefono").value.trim();
-    const correo   = document.getElementById("reg-email").value.trim();
-    const pass     = document.getElementById("reg-pass").value.trim();
+    const email     = document.getElementById("reg-email").value.trim();
+    const telefono  = document.getElementById("reg-telefono").value.trim();
+    const password  = document.getElementById("reg-pass").value.trim();
 
-    //  Crear objeto según estructura real de la tabla CLIENTE
-    const nuevoCliente = {
-      nombre,
-      apellido,
-      direccion,
-      telefono,
-      correo
+    // 2. CREAR OBJETO (DTO Exacto)
+    const datosRegistro = {
+      Nombre: nombre,
+      Apellido: apellido,
+      Direccion: direccion,
+      Telefono: telefono,
+      Correo: email,
+      Contrasena: password
     };
 
     try {
-      // PRIMERA PETICIÓN: registrar al cliente
-      const resCliente = await apiFetch("/api/cliente", {
+      mostrarMensaje("Registrando...", false);
+
+      // 3. ENVIAR A LA API
+      const response = await apiFetch("/api/auth/register", {
         method: "POST",
-        body: JSON.stringify(nuevoCliente)
+        body: JSON.stringify(datosRegistro)
       });
 
-      if (!resCliente.ok) {
-        const errorText = await resCliente.text();
-        mostrarMensaje(`Error al registrar cliente: ${errorText}`, true);
+      // 4. MANEJO DE ERRORES
+      if (!response.ok) {
+        const errorText = await response.text();
+        try {
+            // Intentar leer error JSON bonito
+            const errJson = JSON.parse(errorText);
+            // El backend suele devolver el error en 'title' o en un objeto de errores
+            const mensaje = errJson.title || JSON.stringify(errJson.errors) || "Error en el registro";
+            mostrarMensaje(`Error: ${mensaje}`, true);
+        } catch {
+            mostrarMensaje(`Error: ${errorText}`, true);
+        }
         return;
       }
 
-      const clienteData = await resCliente.json();
-      const clienteId = clienteData.id || clienteData.Id || clienteData.idCliente;
-
-      // Validar
-      if (!clienteId) {
-        mostrarMensaje("Error: la API no retornó el ID del cliente.", true);
-        return;
-      }
-
-      // SEGUNDA PETICIÓN: registrar el usuario enlazado al cliente
-      const nuevoUsuario = {
-        usuario: correo,
-        contrasena: pass,
-        rol: "cliente",
-        cliente_id: clienteId
-      };
-
-      const resUsuario = await apiFetch("/api/usuario", {
-        method: "POST",
-        body: JSON.stringify(nuevoUsuario)
-      });
-
-      if (!resUsuario.ok) {
-        const errorText = await resUsuario.text();
-        mostrarMensaje(`Error al crear usuario: ${errorText}`, true);
-        return;
-      }
-
-      const usuarioData = await resUsuario.json();
-
-      // Normalizar sesión
-      const normalizedUser = {
-        id: usuarioData.id || usuarioData.Id || null,
-        nombre,
-        rol: "cliente",
-        cliente_id: clienteId
-      };
-
-      localStorage.setItem("usuarioConectado", JSON.stringify(normalizedUser));
-
-      mostrarMensaje("Cuenta creada con éxito. Redirigiendo...");
-
-      setTimeout(() => (location.href = "index.html"), 1200);
+      // 5. ÉXITO
+      mostrarMensaje("¡Cuenta creada! Redirigiendo...", false);
+      setTimeout(() => window.location.href = "login.html", 1500);
 
     } catch (error) {
-      console.error("Error de conexión:", error);
-      mostrarMensaje("No se pudo conectar con la API. ¿Está el backend corriendo?", true);
+      console.error("Error crítico:", error);
+      mostrarMensaje("Error de conexión con el servidor.", true);
     }
   });
 });
@@ -90,9 +63,11 @@ function mostrarMensaje(texto, esError = false) {
   if (!msg) {
     msg = document.createElement("p");
     msg.className = "login-msg";
-    msg.style.marginTop = "12px";
-    msg.style.fontWeight = "700";
-    document.getElementById("register-form").appendChild(msg);
+    msg.style.marginTop = "10px";
+    msg.style.fontWeight = "bold";
+    msg.style.textAlign = "center";
+    const btn = document.querySelector(".login-btn");
+    if(btn) btn.parentNode.insertBefore(msg, btn.nextSibling);
   }
   msg.style.color = esError ? "#d9534f" : "#5E925C";
   msg.textContent = texto;
