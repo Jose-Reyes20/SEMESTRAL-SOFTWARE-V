@@ -1,36 +1,61 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Salon_Api.Data;
-using Salon_Api.DTO;
-using Salon_Api.Modelo;
-using Salon_Api.Services.Interfaces;
+﻿// Services/AuthService.cs
 
-namespace Salon_Api.Services
+using EcommerceApi.DTOs;
+using EcommerceApi.Models;
+
+namespace EcommerceApi.Services
 {
-    public class AuthService : IAuthService
+    public class AuthService
     {
-        private readonly ApplicationDbContext _context;
+        // Simulación de contexto de base de datos
+        private readonly List<Cliente> _clientes = new List<Cliente>();
+        private readonly List<Usuario> _usuarios = new List<Usuario>();
 
-        public AuthService(ApplicationDbContext context)
+        // Simula la creación del cliente y el usuario
+        public Usuario Register(UserRegisterDto dto)
         {
-            _context = context;
+            // Lógica real: Verificar si el correo ya existe.
+
+            // 1. Crear Cliente
+            var nuevoCliente = new Cliente
+            {
+                Id = _clientes.Count + 1,
+                Nombre = dto.Nombre,
+                Correo = dto.Correo,
+                // ... otros campos
+            };
+            _clientes.Add(nuevoCliente);
+
+            // 2. Crear Usuario
+            var nuevoUsuario = new Usuario
+            {
+                Id = _usuarios.Count + 1,
+                Username = dto.Correo,
+                Contrasena = "HASHED_" + dto.Contrasena, // Lógica real: Usar BCrypt/Argon2
+                Rol = "cliente",
+                ClienteId = nuevoCliente.Id
+            };
+            _usuarios.Add(nuevoUsuario);
+
+            return nuevoUsuario;
         }
 
-        public async Task<Clientes?> Login(LoginDto dto)
+        // Simula el proceso de inicio de sesión
+        public Usuario? Login(UserLoginDto dto)
         {
-            // Buscar cliente por correo
-            var cliente = await _context.Clientes
-                .FirstOrDefaultAsync(c => c.Correo == dto.Correo);
+            // Lógica real: 
+            // 1. Buscar el usuario por 'dto.Usuario'.
+            // 2. Comparar el hash de 'dto.Contrasena' con el hash almacenado.
 
-            if (cliente == null)
-                return null;
+            var usuarioEncontrado = _usuarios.FirstOrDefault(u => u.Username == dto.Usuario);
 
-            // Validar contraseña
-            bool valid = BCrypt.Net.BCrypt.Verify(dto.Password, cliente.PasswordHash);
+            if (usuarioEncontrado != null && usuarioEncontrado.Contrasena == ("HASHED_" + dto.Contrasena))
+            {
+                // Lógica real: Generar y devolver un JWT (JSON Web Token)
+                return usuarioEncontrado;
+            }
 
-            if (!valid)
-                return null;
-
-            return cliente; // El login es correcto
+            return null; // Fallo de autenticación
         }
     }
 }
