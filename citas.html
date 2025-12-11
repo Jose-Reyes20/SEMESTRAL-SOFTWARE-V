@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Agendar Citas</title>
+    <link rel="stylesheet" href="./CSS/style.css" />
+  </head>
+  <body>
+    <header class="header">
+      <img class="bg" src="Imagen/bg.svg" alt="" />
+
+      <div class="menu container">
+        <a href="#" class="logo">Agendar Citas</a>
+
+        <input type="checkbox" id="menu" />
+        <label for="menu"
+          ><img src="Imagen/menu.svg" class="menu-icono" alt=""
+        /></label>
+
+        <nav class="navbar">
+          <ul>
+            <li><a href="index.html">Inicio</a></li>
+            <li><a href="Servicios.html">Servicios</a></li>
+            <li><a href="Productos.html">Productos</a></li>
+            <li><a href="citas.html">Agendar Citas</a></li>
+            <li class="cart-icon">
+              <a href="carrito.html" aria-label="Carrito">
+                <svg
+                  width="26"
+                  height="26"
+                  viewBox="0 0 24 24"
+                  aria-hidden="true"
+                >
+                  <path
+                    d="M6 6h15l-2 9H8L6 6zm0 0H3"
+                    stroke="#5E925C"
+                    stroke-width="2"
+                    fill="none"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                  <circle cx="10" cy="19" r="1" fill="#5E925C" />
+                  <circle cx="17" cy="19" r="1" fill="#5E925C" />
+                </svg>
+                <span id="cart-count">0</span>
+              </a>
+            </li>
+            <li class="login-icon">
+              <a href="login.html" aria-label="Iniciar Sesión">
+                <svg
+                  viewBox="0 0 24 24"
+                  width="26"
+                  height="26"
+                  aria-hidden="true"
+                >
+                  <circle
+                    cx="12"
+                    cy="7"
+                    r="4"
+                    stroke="#5E925C"
+                    stroke-width="2"
+                    fill="none"
+                  />
+                  <path
+                    d="M4 20c0-4 4-6 8-6s8 2 8 6"
+                    stroke="#5E925C"
+                    stroke-width="2"
+                    fill="none"
+                    stroke-linecap="round"
+                  />
+                </svg>
+              </a>
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <section class="citas-section container">
+      <h2>Agendar Cita</h2>
+      <p>Completa el formulario para reservar tu cita.</p>
+
+      <form id="formCita" class="form-cita">
+        <div class="grupo-form">
+          <label class="label-cita">Nombre completo</label>
+          <input type="text" id="nombre" class="input-cita" required />
+        </div>
+
+        <div class="grupo-form">
+          <label class="label-cita">Correo electrónico</label>
+          <input type="email" id="email" class="input-cita" required />
+        </div>
+
+        <div class="grupo-form">
+          <label class="label-cita">Servicio</label>
+          <select id="servicio" class="select-cita" required>
+            <option value="">Seleccione…</option>
+            <option value="1">Pedicure</option>
+            <option value="2">Manicure</option>
+            <option value="3">Cabello</option>
+            <option value="4">Facial</option>
+            <option value="5">Maquillaje</option>
+          </select>
+        </div>
+
+        <div class="grupo-form">
+          <label class="label-cita">Fecha</label>
+          <input type="date" id="fecha" class="input-cita" required />
+        </div>
+
+        <div class="grupo-form">
+          <label class="label-cita">Hora</label>
+          <select id="hora" class="select-cita" required>
+            <option value="">Seleccione…</option>
+            <option value="09:00">9 AM</option>
+            <option value="10:00">10 AM</option>
+            <option value="11:00">11 AM</option>
+            <option value="12:00">12 PM</option>
+            <option value="13:00">1 PM</option>
+            <option value="14:00">2 PM</option>
+            <option value="15:00">3 PM</option>
+            <option value="16:00">4 PM</option>
+            <option value="17:00">5 PM</option>
+          </select>
+        </div>
+
+        <div class="grupo-form">
+          <label class="label-cita">Estilista</label>
+          <select id="estilista" class="select-cita" required>
+            <option value="">Seleccione…</option>
+            <option value="1">Emilia</option>
+            <option value="2">Carlos</option>
+            <option value="3">Antonella</option>
+            <option value="4">Sofía</option>
+            <option value="5">Diego</option>
+            <option value="6">Ana</option>
+          </select>
+        </div>
+
+        <button type="submit" class="btn-agendar">Agendar</button>
+        <p id="mensajeConfirmacion" class="confirmacion"></p>
+      </form>
+
+      <h3>Tus Citas</h3>
+      <ul id="listaCitas"></ul>
+    </section>
+
+    <footer class="footer container">
+      <div class="footer-links"></div>
+    </footer>
+
+    <script src="JS/config.js"></script>
+    <script src="JS/session.js"></script>
+    <script src="./JS/carrito.js"></script>
+    <script src="JS/citas.js"></script>
+  </body>
+</html>
+---
