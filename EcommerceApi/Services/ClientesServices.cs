@@ -1,13 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using EcommerceApi.Data; // <<-- CORREGIDO
-using EcommerceApi.DTOs; // <<-- CORREGIDO
-using EcommerceApi.Models; // <<-- CORREGIDO (Para la entidad Cliente)
-using EcommerceApi.Services.Interfaces; // <<-- CORREGIDO
-using BCrypt.Net;
+using EcommerceApi.Data;
+using EcommerceApi.DTOs;
+using EcommerceApi.Models;
+using EcommerceApi.Services.Interfaces;
 
-namespace EcommerceApi.Services // <<-- CORREGIDO
+namespace EcommerceApi.Services
 {
-    // Se corrige el nombre de la clase a ClienteService (singular) para consistencia
     public class ClientesService : IClientesService
     {
         private readonly ApplicationDbContext _context;
@@ -17,37 +15,32 @@ namespace EcommerceApi.Services // <<-- CORREGIDO
             _context = context;
         }
 
-        // Se cambia el tipo de retorno a 'Cliente' (singular)
         public async Task<IEnumerable<Cliente>> ObtenerClientes()
         {
             return await _context.Clientes.ToListAsync();
         }
 
-        // Se cambia el tipo de retorno a 'Cliente' (singular)
         public async Task<Cliente?> ObtenerClientePorId(int id)
         {
             return await _context.Clientes.FindAsync(id);
         }
 
-        // ✅ Crear Cliente con DTO
-        // Se cambia el tipo de retorno a 'Cliente' (singular)
         public async Task<Cliente> CrearCliente(ClienteCreateDto dto)
         {
-            // Validación: solo números en Telefono
-            if (!dto.Telefono.All(char.IsDigit))
+            // Validación básica
+            if (string.IsNullOrEmpty(dto.Telefono) || !dto.Telefono.All(char.IsDigit))
                 throw new Exception("El teléfono solo puede contener números.");
 
-            // El modelo Cliente debe tener una propiedad 'PasswordHash'
             var nuevoCliente = new Cliente
             {
-                // NOTA: Si el modelo Cliente no tiene Apellido y Direccion, esto podría causar un error.
                 Nombre = dto.Nombre,
-                // FechaRegistro eliminada del DTO, la DB/EF se encarga de CreatedAt
+                // Si tu DTO no tiene Apellido/Dirección, usa valores por defecto o string.Empty
+                Apellido = "",
+                Direccion = "",
                 Telefono = dto.Telefono,
-                Correo = dto.Correo,
-
-                // 👇 Hashear la contraseña ANTES de guardar
-                PasswordHash = BCrypt.Net.BCrypt.HashPassword(dto.Password)
+                Correo = dto.Correo ?? ""
+                // NOTA: No guardamos Password aquí. El password es para el Usuario (Login).
+                // Si necesitas crear el usuario login al mismo tiempo, usa AuthService.
             };
 
             _context.Clientes.Add(nuevoCliente);
@@ -56,42 +49,29 @@ namespace EcommerceApi.Services // <<-- CORREGIDO
             return nuevoCliente;
         }
 
-        // ✅ Actualizar Cliente con DTO
-        // Se cambia el tipo de retorno a 'Cliente' (singular)
         public async Task<Cliente?> ActualizarCliente(int id, ClienteCreateDto dto)
         {
             var cliente = await _context.Clientes.FindAsync(id);
+            if (cliente == null) return null;
 
-            if (cliente == null)
-                return null;
-
-            // Validación: solo números en Telefono
-            if (!dto.Telefono.All(char.IsDigit))
+            if (!string.IsNullOrEmpty(dto.Telefono) && !dto.Telefono.All(char.IsDigit))
                 throw new Exception("El teléfono solo puede contener números.");
 
             cliente.Nombre = dto.Nombre;
-            cliente.Telefono = dto.Telefono;
-            cliente.Correo = dto.Correo;
-            // cliente.FechaRegistro = dto.FechaRegistro; // <-- Campo FechaRegistro eliminado del DTO.
-
-            // IMPORTANTE: No se debe actualizar el hash de la contraseña (PasswordHash) 
-            // en una actualización de datos simple, sino mediante un endpoint específico.
+            if (dto.Telefono != null) cliente.Telefono = dto.Telefono;
+            if (dto.Correo != null) cliente.Correo = dto.Correo;
 
             await _context.SaveChangesAsync();
-
             return cliente;
         }
 
         public async Task<bool> EliminarCliente(int id)
         {
             var cliente = await _context.Clientes.FindAsync(id);
-
-            if (cliente == null)
-                return false;
+            if (cliente == null) return false;
 
             _context.Clientes.Remove(cliente);
             await _context.SaveChangesAsync();
-
             return true;
         }
     }

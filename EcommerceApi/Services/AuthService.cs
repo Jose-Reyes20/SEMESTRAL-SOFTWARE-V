@@ -1,4 +1,4 @@
-﻿/using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using EcommerceApi.Data;
 using EcommerceApi.DTOs;
 using EcommerceApi.Models;
@@ -26,17 +26,21 @@ namespace EcommerceApi.Services
                 Telefono = dto.Telefono,
                 Correo = dto.Correo
             };
+
+            // Guardamos primero el cliente para obtener su ID
             _context.Clientes.Add(nuevoCliente);
-            _context.SaveChanges(); // Guardar para generar el ID del cliente
+            _context.SaveChanges();
 
             // 2. Crear Usuario vinculado
             var nuevoUsuario = new Usuario
             {
                 Username = dto.Correo,
+                // Encriptamos la contraseña
                 Contrasena = BCrypt.Net.BCrypt.HashPassword(dto.Contrasena),
                 Rol = "cliente",
-                ClienteId = nuevoCliente.Id
+                ClienteId = nuevoCliente.Id // Usamos el ID generado
             };
+
             _context.Usuarios.Add(nuevoUsuario);
             _context.SaveChanges();
 
@@ -45,11 +49,13 @@ namespace EcommerceApi.Services
 
         public Usuario? Login(UserLoginDto dto)
         {
+            // Buscamos el usuario por Username/Correo
             var usuarioEncontrado = _context.Usuarios
                 .FirstOrDefault(u => u.Username == dto.Usuario);
 
             if (usuarioEncontrado == null) return null;
 
+            // Verificamos si la contraseña coincide con el hash
             bool validPassword = BCrypt.Net.BCrypt.Verify(dto.Contrasena, usuarioEncontrado.Contrasena);
 
             if (validPassword)
