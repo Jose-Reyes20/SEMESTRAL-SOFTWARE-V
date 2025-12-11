@@ -1,18 +1,52 @@
-using System.Runtime.InteropServices;
+using Microsoft.EntityFrameworkCore;
+using Salon_Api.Data;
+using Salon_Api.Modelo;
+using Salon_Api.Services.Interfaces;
+using Salon_Api.DTO;
 
-// En proyectos de estilo SDK como este, varios atributos de ensamblado que definían
-// en este archivo se agregan ahora automáticamente durante la compilación y se rellenan
-// con valores definidos en las propiedades del proyecto. Para obtener detalles acerca
-// de los atributos que se incluyen y cómo personalizar este proceso, consulte https://aka.ms/assembly-info-properties
+namespace Salon_Api.Services
+{
+    public class FacturasService : IFacturasService
+    {
+        private readonly ApplicationDbContext _context;
 
+        public FacturasService(ApplicationDbContext context)
+        {
+            _context = context;
+        }
 
-// Al establecer ComVisible en false, se consigue que los tipos de este ensamblado
-// no sean visibles para los componentes COM. Si tiene que acceder a un tipo en este
-// ensamblado desde COM, establezca el atributo ComVisible en true en ese tipo.
+        public async Task<IEnumerable<FacturaDto>> GetFacturas()
+        {
+            return await _context.Facturas
+                .Select(f => new FacturaDto
+                {
+                    Id = f.Id,
+                    CuponId = f.CuponId,
+                    Subtotal = f.Subtotal,
+                    Descuento = f.Descuento,
+                    Total = f.Total,
+                    Fecha = f.Fecha,
+                    Itbms = f.Itbms,
+                    UsuarioId = f.UsuarioId
+                })
+                .ToListAsync();
+        }
 
-[assembly: ComVisible(false)]
-
-// El siguiente GUID es para el identificador de typelib, si este proyecto se expone
-// en COM.
-
-[assembly: Guid("f66a04bf-bebb-4473-b481-7de833a9bb08")]
+        public async Task<FacturaDto?> GetFacturaPorId(int id)
+        {
+            var f = await _context.Facturas.FindAsync(id);
+            if (f == null) return null;
+            return new FacturaDto
+            {
+                Id = f.Id,
+                CuponId = f.CuponId,
+                Subtotal = f.Subtotal,
+                Descuento = f.Descuento,
+                Total = f.Total,
+                Fecha = f.Fecha,
+                Itbms = f.Itbms,
+                UsuarioId = f.UsuarioId
+            };
+        }
+    }
+}

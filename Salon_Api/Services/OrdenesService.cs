@@ -1,18 +1,101 @@
-using System.Runtime.InteropServices;
+using Microsoft.EntityFrameworkCore;
+using Salon_Api.Data;
+using Salon_Api.Modelo;
+using Salon_Api.Services.Interfaces;
+using Salon_Api.DTO;
 
-// En proyectos de estilo SDK como este, varios atributos de ensamblado que definían
-// en este archivo se agregan ahora automáticamente durante la compilación y se rellenan
-// con valores definidos en las propiedades del proyecto. Para obtener detalles acerca
-// de los atributos que se incluyen y cómo personalizar este proceso, consulte https://aka.ms/assembly-info-properties
+namespace Salon_Api.Services
+{
+    public class OrdenesService : IOrdenesService
+    {
+        private readonly ApplicationDbContext _context;
 
+        public OrdenesService(ApplicationDbContext context)
+        {
+            _context = context;
+        }
 
-// Al establecer ComVisible en false, se consigue que los tipos de este ensamblado
-// no sean visibles para los componentes COM. Si tiene que acceder a un tipo en este
-// ensamblado desde COM, establezca el atributo ComVisible en true en ese tipo.
+        public async Task<IEnumerable<OrdenDto>> GetOrdenes()
+        {
+            return await _context.Ordenes
+                .Select(o => new OrdenDto
+                {
+                    Id = o.Id,
+                    Estado = o.Estado,
+                    Fecha = o.Fecha,
+                    UsuarioId = o.UsuarioId,
+                    CuponId = o.CuponId,
+                    Subtotal = o.Subtotal,
+                    Total = o.Total,
+                    Descuento = o.Descuento,
+                    Itbms = o.Itbms
+                })
+                .ToListAsync();
+        }
 
-[assembly: ComVisible(false)]
+        public async Task<IEnumerable<OrdenDto>> GetOrdenesPorUsuario(int usuarioId)
+        {
+            return await _context.Ordenes
+                .Where(o => o.UsuarioId == usuarioId)
+                .Select(o => new OrdenDto
+                {
+                    Id = o.Id,
+                    Estado = o.Estado,
+                    Fecha = o.Fecha,
+                    UsuarioId = o.UsuarioId,
+                    CuponId = o.CuponId,
+                    Subtotal = o.Subtotal,
+                    Total = o.Total,
+                    Descuento = o.Descuento,
+                    Itbms = o.Itbms
+                })
+                .ToListAsync();
+        }
 
-// El siguiente GUID es para el identificador de typelib, si este proyecto se expone
-// en COM.
+        public async Task<OrdenDto> CrearOrden(Orden orden)
+        {
+            _context.Ordenes.Add(orden);
+            await _context.SaveChangesAsync();
 
-[assembly: Guid("70f0f2a9-27c0-4f77-a3b4-5a82a5cbb388")]
+            return new OrdenDto
+            {
+                Id = orden.Id,
+                Estado = orden.Estado,
+                Fecha = orden.Fecha,
+                UsuarioId = orden.UsuarioId,
+                CuponId = orden.CuponId,
+                Subtotal = orden.Subtotal,
+                Total = orden.Total,
+                Descuento = orden.Descuento,
+                Itbms = orden.Itbms
+            };
+        }
+
+        public async Task<OrdenDto?> GetOrdenPorId(int id)
+        {
+            var o = await _context.Ordenes.FindAsync(id);
+            if (o == null) return null;
+            return new OrdenDto
+            {
+                Id = o.Id,
+                Estado = o.Estado,
+                Fecha = o.Fecha,
+                UsuarioId = o.UsuarioId,
+                CuponId = o.CuponId,
+                Subtotal = o.Subtotal,
+                Total = o.Total,
+                Descuento = o.Descuento,
+                Itbms = o.Itbms
+            };
+        }
+
+        public async Task<bool> ActualizarEstado(int id, string nuevoEstado)
+        {
+            var orden = await _context.Ordenes.FindAsync(id);
+            if (orden == null) return false;
+            orden.Estado = nuevoEstado;
+            await _context.SaveChangesAsync();
+            return true;
+        }
+    }
+}

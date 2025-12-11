@@ -1,18 +1,41 @@
-using System.Runtime.InteropServices;
+using Microsoft.AspNetCore.Mvc;
+using Salon_Api.Services.Interfaces;
+using Salon_Api.Modelo;
 
-// En proyectos de estilo SDK como este, varios atributos de ensamblado que definían
-// en este archivo se agregan ahora automáticamente durante la compilación y se rellenan
-// con valores definidos en las propiedades del proyecto. Para obtener detalles acerca
-// de los atributos que se incluyen y cómo personalizar este proceso, consulte https://aka.ms/assembly-info-properties
+namespace Salon_Api.Controllers
+{
+    [ApiController]
+    [Route("api/[controller]")]
+    public class CuponesController : ControllerBase
+    {
+        private readonly ICuponesService _service;
 
+        public CuponesController(ICuponesService service)
+        {
+            _service = service;
+        }
 
-// Al establecer ComVisible en false, se consigue que los tipos de este ensamblado
-// no sean visibles para los componentes COM. Si tiene que acceder a un tipo en este
-// ensamblado desde COM, establezca el atributo ComVisible en true en ese tipo.
+        [HttpGet("{codigo}")]
+        public async Task<IActionResult> GetPorCodigo(string codigo)
+        {
+            var cupon = await _service.GetCuponPorCodigo(codigo);
+            if (cupon == null) return NotFound();
+            return Ok(cupon);
+        }
 
-[assembly: ComVisible(false)]
+        [HttpPost]
+        public async Task<IActionResult> CrearCupon([FromBody] Cupon cupon)
+        {
+            var created = await _service.CrearCupon(cupon);
+            return CreatedAtAction(nameof(GetPorCodigo), new { codigo = created.Codigo }, created);
+        }
 
-// El siguiente GUID es para el identificador de typelib, si este proyecto se expone
-// en COM.
-
-[assembly: Guid("c81c8c97-81e5-486d-b47f-170330ed5874")]
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Actualizar(int id, [FromBody] Cupon cupon)
+        {
+            var updated = await _service.ActualizarCupon(id, cupon);
+            if (updated == null) return NotFound();
+            return Ok(updated);
+        }
+    }
+}
