@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel Administrativo – MatchaSalon</title>
+    <link rel="stylesheet" href="CSS/style.css">
+</head>
+
+<body class="admin-body">
+    <!-- BARRA SUPERIOR -->
+    <header class="admin-header">
+        <h2>Panel Administrativo</h2>
+
+        <!-- Ícono usuario -->
+        <a href="#" class="admin-user-icon" id="user-area">
+            <svg viewBox="0 0 24 24" width="28" height="28">
+                <circle cx="12" cy="7" r="4" stroke="#5E925C" stroke-width="2" fill="none"/>
+                <path d="M4 20c0-4 4-6 8-6s8 2 8 6" 
+                      stroke="#5E925C" stroke-width="2" fill="none"/>
+            </svg>
+        </a>
+    </header>
+
+    <!-- CONTENIDO PRINCIPAL -->
+    <main class="admin-container">
+
+        <!-- TARJETAS DE RESUMEN -->
+        <section class="admin-cards">
+
+            <div class="admin-card">
+                <h3>Citas del Día</h3>
+                <p>12 citas registradas</p>
+            </div>
+
+            <div class="admin-card">
+                <h3>Total Clientes</h3>
+                <p>184 clientes</p>
+            </div>
+
+            <div class="admin-card">
+                <h3>Servicios Activos</h3>
+                <p>14 servicios</p>
+            </div>
+
+            <div class="admin-card">
+                <h3>Productos en Stock</h3>
+                <p>38 productos</p>
+            </div>
+
+        </section>
+
+        <!-- TABLA DE ÚLTIMAS CITAS -->
+        <section class="admin-table-section">
+            <h3>Últimas citas</h3>
+
+            <table class="admin-table">
+                <thead>
+                    <tr>
+                        <th>Cliente</th>
+                        <th>Servicio</th>
+                        <th>Fecha</th>
+                        <th>Hora</th>
+                        <th>Estado</th>
+                    </tr>
+                </thead>
+
+                <tbody id="tabla-citas">
+                    <tr>
+                        <td>María Gómez</td>
+                        <td>Manicure Gel</td>
+                        <td>03/12/2025</td>
+                        <td>10:30 AM</td>
+                        <td class="estado ok">Confirmada</td>
+                    </tr>
+
+                    <tr>
+                        <td>Ana Torres</td>
+                        <td>Pedicure Spa</td>
+                        <td>03/12/2025</td>
+                        <td>12:00 PM</td>
+                        <td class="estado pendiente">Pendiente</td>
+                    </tr>
+
+                    <tr>
+                        <td>Laura Pérez</td>
+                        <td>Tinte + Blow Dry</td>
+                        <td>03/12/2025</td>
+                        <td>03:30 PM</td>
+                        <td class="estado cancelada">Cancelada</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+    </main>
+
+
+<script src="JS/config.js"></script>
+<script src="JS/session.js"></script>
+<script src="JS/carrito.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+    const usuario = JSON.parse(localStorage.getItem("usuarioConectado"));
+
+    if (!usuario || usuario.rol !== "admin") {
+        window.location.replace("index.html");
+    }
+});
+</script>
+</body>
+</html>
