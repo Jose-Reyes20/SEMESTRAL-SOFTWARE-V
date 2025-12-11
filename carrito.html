@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Carrito - MatchaSalon</title>
+    <title>Carrito - Distribuidora22</title>
     <link rel="stylesheet" href="CSS/style.css">
 </head>
 
@@ -13,7 +13,7 @@
     <img class="bg" src="Imagen/bg.svg" alt="">
 
     <div class="menu container">
-        <a href="index.html" class="logo">MatchaSalon</a>
+        <a href="index.html" class="logo">Distribuidora22</a>
 
         <input type="checkbox" id="menu">
         <label for="menu"><img src="Imagen/menu.svg" class="menu-icono" alt=""></label>
@@ -21,11 +21,8 @@
         <nav class="navbar">
             <ul>
                 <li><a href="index.html">Inicio</a></li>
-                <li><a href="Servicios.html">Servicios</a></li>
-                <li><a href="Productos.html">Productos</a></li>
-                <li><a href="citas.html">Agendar Citas</a></li>
+                <li><a href="productos.html">Productos</a></li>
 
-                <!-- Carrito -->
                 <li class="cart-icon">
                     <a href="carrito.html" aria-label="Carrito">
                         <svg width="26" height="26" viewBox="0 0 24 24" aria-hidden="true">
@@ -39,7 +36,6 @@
                     </a>
                 </li>
 
-                <!-- Login -->
                 <li class="login-icon" id="user-area">
                     <a href="login.html" aria-label="Iniciar Sesión" id="login-link">
                         <svg viewBox="0 0 24 24" width="26" height="26">
@@ -56,27 +52,26 @@
 </header>
 
 
-<!-- CONTENIDO DEL CARRITO -->
 <main class="container" style="padding: 120px 0;">
 
     <h1 style="text-align:center; margin-bottom:30px;">Tu Carrito</h1>
 
     <div id="cart-container" class="cart-container">
 
-        <!--  Aquí JS insertará los ítems -->
         <div id="cart-items"></div>
 
-   <div class="cart-summary">
-    <h2>Total: <span id="cart-total">$0.00</span></h2>
+        <div class="cart-summary">
+            <h2>Total: <span id="cart-total">$0.00</span></h2>
 
-    <button id="clear-cart" class="login-btn" style="margin-top:10px;">Vaciar Carrito</button>
+            <button id="clear-cart" class="login-btn" style="margin-top:10px; background:#d9534f;">
+                Vaciar Carrito
+            </button>
 
-    <!-- BOTÓN PARA ENVIAR COMPRA A LA API -->
-    <button id="confirmar-compra" class="login-btn" style="margin-top:10px; background:#5E925C;">
-        Confirmar Compra
-    </button>
-</div>
-
+            <button id="confirmar-compra" class="login-btn" style="margin-top:10px; background:#5E925C;">
+                Confirmar Compra
+            </button>
+        </div>
+    </div>
 
 </main>
 
@@ -85,41 +80,36 @@
     <div class="footer-links">
         <div class="link">
             <h3>Contactos</h3>
-            <div class="socials">
-                <img src="Imagen/s1.svg" alt="">
-                <img src="Imagen/s3.svg" alt="">
-            </div>
+            <ul>
+                <li><strong>Teléfono:</strong> +507 6501-2234</li>
+                <li><strong>WhatsApp:</strong> +507 6889-4410</li>
+                <li><strong>Correo:</strong> distribuidora.info@gmail.com</li>
+                <li><strong>Dirección:</strong> Panamá, Ciudad de Panamá</li>
+            </ul>
         </div>
          <div class="link">
             <h3>Redes sociales</h3>
             <ul>
-                <li><a href="#">Instagram | @Matcha_Salon</a></li>
-                <li><a href="#">Correo | matchasalon@gmail.com </a></li>
+                <li><a href="#">Instagram | @Distribuidora22.com</a></li>
+                <li><a href="#">TikTok | @Distribuidora22.com</a></li>
             </ul>
         </div>
          <div class="link">
-            <h3>Servicios</h3>
+            <h3>Categorías</h3>
             <ul>
-                <li><a href="#">Manicure</a></li>
-                <li><a href="#">Pedicure</a></li>
-                <li><a href="#">Tintes</a></li>
-                <li><a href="#">Faciales</a></li>
+                <li><a href="#">Ropa</a></li>
+                <li><a href="#">Tecnología</a></li>
+                <li><a href="#">Alimentos</a></li>
             </ul>
         </div>
          <div class="link">
             <h3>Sucursales</h3>
             <ul>
-                <li><a href="#">San Francisco | 7am a 5pm</a></li>
-                <li><a href="#">Santa Maria | 7am a 5pm</a></li>
-                <li><a href="#">Via España | 7am a 5pm</a></li>
-                <li><a href="#">Telefono | 300-000</a></li>
+                <li><a href="#">24 De Diciembre | 8am a 4:30pm</a></li>
             </ul>
         </div>
     </div>
 </footer>
 
-<script src="JS/carrito.js"></script>
-<script src="JS/session.js"></script>
-</body>
+<script src="JS/config.js"></script> <script src="JS/session.js"></script> <script src="JS/carrito.js"></script> </body>
 </html>
- 

@@ -1,17 +1,13 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Distribuidora 22</title>
-
-    <!-- AQUI VA TU CSS COMPLETO, PERO YA INCLUYE EL NAVBAR NUEVO ABAJO -->
     <link rel="stylesheet" href="CSS/style.css">
-
 </head>
 <body>
 
-    <!-- ▬▬▬▬▬▬▬ NUEVA NAVBAR AMARILLA ▬▬▬▬▬▬▬ -->
     <nav class="navbar-new">
 
         <div class="nav-left">
@@ -24,11 +20,13 @@
         </div>
 
         <div class="nav-right">
-            <a href="login.html">Login</a>
-            <a href="registrarse.html">Registrarse</a>
+            
+            <div id="user-area" style="display: inline-flex; gap: 15px; align-items: center;">
+                <a href="login.html">Login</a>
+                <a href="registrarse.html">Registrarse</a>
+            </div>
 
-            <!-- CARRITO CON TU SVG -->
-            <a href="carrito.html" class="cart">
+            <a href="carrito.html" class="cart" style="margin-left: 15px;">
                 <svg width="30" height="30" viewBox="0 0 24 24">
                     <path d="M6 6h15l-2 9H8L6 6zm0 0H3"
                         stroke="#5E925C" stroke-width="2" fill="none"
@@ -42,7 +40,6 @@
 
     </nav>
 
-    <!-- ▬▬▬▬▬▬▬ SECCIÓN PRINCIPAL ▬▬▬▬▬▬▬ -->
     <section class="hero">
 
         <div class="hero-left">
@@ -63,6 +60,10 @@
         </div>
 
     </section>
+
+    <script src="JS/config.js"></script>
+    <script src="JS/session.js"></script>
+    <script src="JS/carrito.js"></script>
 
 </body>
 </html>

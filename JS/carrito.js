@@ -1,4 +1,3 @@
-
 let carrito = JSON.parse(localStorage.getItem("carrito")) || {};
 
 function guardarCarrito() {
@@ -16,9 +15,9 @@ function calcularTotal() {
     for (const item of Object.values(carrito)) {
         total += item.precio * item.cantidad;
     }
-
     const totalElemento = document.getElementById("cart-total");
     if (totalElemento) totalElemento.textContent = "$" + total.toFixed(2);
+    return total;
 }
 
 function cargarCarritoEnPagina() {
@@ -27,79 +26,57 @@ function cargarCarritoEnPagina() {
 
     contenedor.innerHTML = "";
 
-    for (const nombre in carrito) {
-        const item = carrito[nombre];
-
-        const div = document.createElement("div");
-        div.classList.add("cart-item");
-
-        div.innerHTML = `
-            <div class="item-info">
-                <h3>${nombre}</h3>
-                <p>$${item.precio.toFixed(2)}</p>
-            </div>
-
-            <div class="item-controls">
-                <button class="btn-restar" data-nombre="${nombre}">-</button>
-                <span>${item.cantidad}</span>
-                <button class="btn-sumar" data-nombre="${nombre}">+</button>
-            </div>
-
-            <button class="btn-eliminar" data-nombre="${nombre}">Eliminar</button>
-        `;
-
-        contenedor.appendChild(div);
+    if (Object.keys(carrito).length === 0) {
+        contenedor.innerHTML = "<p style='text-align:center; padding:20px;'>Tu carrito está vacío.</p>";
+        return;
     }
 
+    for (const nombre in carrito) {
+        const item = carrito[nombre];
+        const div = document.createElement("div");
+        div.classList.add("cart-item");
+        div.innerHTML = `
+            <div class="item-info">
+                <h3>${item.nombre || nombre}</h3>
+                <p>$${item.precio.toFixed(2)}</p>
+            </div>
+            <div class="item-controls">
+                <button class="btn-restar" data-id="${item.id}">-</button>
+                <span>${item.cantidad}</span>
+                <button class="btn-sumar" data-id="${item.id}">+</button>
+            </div>
+            <button class="btn-eliminar" data-id="${item.id}">Eliminar</button>
+        `;
+        contenedor.appendChild(div);
+    }
     agregarEventos();
     actualizarContador();
     calcularTotal();
 }
 
-
-//      EVENTOS DEL CARRITO EN LA PÁGINA
-
 function agregarEventos() {
-
-    // SUMAR en carrito
+    // Usamos ID en lugar de nombre para mayor precisión
     document.querySelectorAll(".btn-sumar").forEach(btn => {
-        btn.addEventListener("click", () => {
-            const nombre = btn.dataset.nombre;
-            if (!carrito[nombre]) return;
-            carrito[nombre].cantidad++;
-            guardarCarrito();
-            cargarCarritoEnPagina();
-        });
+        btn.addEventListener("click", () => modificarCantidad(btn.dataset.id, 1));
     });
 
-    // RESTAR en carrito
     document.querySelectorAll(".btn-restar").forEach(btn => {
-        btn.addEventListener("click", () => {
-            const nombre = btn.dataset.nombre;
-            if (!carrito[nombre]) return;
-
-            if (carrito[nombre].cantidad > 1) {
-                carrito[nombre].cantidad--;
-            } else {
-                delete carrito[nombre];
-            }
-
-            guardarCarrito();
-            cargarCarritoEnPagina();
-        });
+        btn.addEventListener("click", () => modificarCantidad(btn.dataset.id, -1));
     });
 
-    // ELIMINAR
     document.querySelectorAll(".btn-eliminar").forEach(btn => {
         btn.addEventListener("click", () => {
-            const nombre = btn.dataset.nombre;
-            delete carrito[nombre];
-            guardarCarrito();
-            cargarCarritoEnPagina();
+            const id = btn.dataset.id;
+            // Buscar por ID en el objeto carrito
+            const key = Object.keys(carrito).find(k => carrito[k].id == id);
+            if (key) {
+                delete carrito[key];
+                guardarCarrito();
+                cargarCarritoEnPagina();
+            }
         });
     });
 
-    // VACIAR CARRITO
     const clearBtn = document.getElementById("clear-cart");
     if (clearBtn) {
         clearBtn.addEventListener("click", () => {
@@ -111,124 +88,77 @@ function agregarEventos() {
     }
 }
 
+function modificarCantidad(id, delta) {
+    const key = Object.keys(carrito).find(k => carrito[k].id == id);
+    if (!key) return;
 
-//   BOTONES + Y - DE LA PÁGINA DE PRODUCTOS
+    carrito[key].cantidad += delta;
+    if (carrito[key].cantidad <= 0) delete carrito[key];
+    
+    guardarCarrito();
+    cargarCarritoEnPagina();
+}
 
-document.querySelectorAll(".qty-btn.plus").forEach(btn => {
-    btn.addEventListener("click", () => {
-        const nombre = btn.dataset.nombre;
-        const precio = parseFloat(btn.dataset.precio);
-        const idProducto = parseInt(btn.dataset.id);
-
-        if (!idProducto || idProducto < 1) {
-            console.error(" ERROR: El botón no tiene un ID válido:", btn);
-            return;
-        }
-
-        if (!carrito[nombre]) {
-            carrito[nombre] = { 
-                precio: precio, 
-                cantidad: 0,
-                id: idProducto
-            };
-        }
-
-        carrito[nombre].cantidad++;
-
-        const display = document.querySelector(`.qty-display[data-id="${idProducto}"]`);
-        if (display) display.textContent = carrito[nombre].cantidad;
-
-        guardarCarrito();
-        actualizarContador();
-    });
-});
-
-document.querySelectorAll(".qty-btn.minus").forEach(btn => {
-    btn.addEventListener("click", () => {
-        const nombre = btn.dataset.nombre;
-        const idProducto = parseInt(btn.dataset.id);
-
-        if (!carrito[nombre]) return;
-
-        carrito[nombre].cantidad--;
-
-        if (carrito[nombre].cantidad <= 0) {
-            delete carrito[nombre];
-        }
-
-        const display = document.querySelector(`.qty-display[data-id="${idProducto}"]`);
-        if (display) display.textContent = carrito[nombre] ? carrito[nombre].cantidad : 0;
-
-        guardarCarrito();
-        actualizarContador();
-    });
-});
-
-
-//              CONFIRMAR COMPRA
-
+// ==========================================
+//   CONFIRMAR COMPRA (Conexión a API Ordenes)
+// ==========================================
 document.getElementById("confirmar-compra")?.addEventListener("click", async () => {
+    // 1. Validar usuario conectado
+    const usuarioStr = localStorage.getItem("usuarioConectado");
+    if (!usuarioStr) {
+        alert("Debes iniciar sesión para comprar.");
+        window.location.href = "login.html";
+        return;
+    }
+    const usuario = JSON.parse(usuarioStr);
 
-    console.log(" Carrito actual:", carrito);
-
+    // 2. Validar carrito
     if (Object.keys(carrito).length === 0) {
         alert("Tu carrito está vacío.");
         return;
     }
 
-    const detalles = Object.entries(carrito)
-        .map(([nombre, item]) => ({
-            idProducto: Number(item.id || item.idProducto || 0),
-            cantidad: Number(item.cantidad || 0)
-        }))
-        .filter(det => det.idProducto > 0 && det.cantidad > 0);
+    const montoTotal = calcularTotal();
+    const impuesto = montoTotal * 0.07; // Ejemplo 7%
+    const totalFinal = montoTotal + impuesto;
 
-    console.log(" Detalles construidos:", detalles);
-
-    if (detalles.length === 0) {
-        alert(" Error: el carrito no contiene productos válidos.");
-        return;
-    }
-
-    const ventaData = {
-        idCliente: 1,
-        detalles: detalles
+    // 3. Construir objeto ORDEN según tu Backend C#
+    const nuevaOrden = {
+        UsuarioId: usuario.id, // ID del usuario logueado
+        Estado: "pendiente",
+        Fecha: new Date().toISOString(),
+        Subtotal: montoTotal,
+        Itbms: impuesto,
+        Total: totalFinal,
+        Descuento: 0,
+        // Opcional: Si tu API soporta recibir detalles aquí, los agregas. 
+        // Si no, la orden se creará vacía de productos.
     };
 
-    console.log(" JSON ENVIADO A LA API:", ventaData);
-
     try {
-        const response = await fetch("https://localhost:7024/api/Ventas/registrar", {
+        // Usar apiFetch con la configuración centralizada
+        const response = await apiFetch("/api/ordenes", {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(ventaData)
+            body: JSON.stringify(nuevaOrden)
         });
 
-        const data = await response.json().catch(() => null);
-
-        console.log(" Respuesta API:", response.status, data);
-
         if (!response.ok) {
-            alert(" Error API: " + (data?.mensaje || `HTTP ${response.status}`));
+            alert("Error al procesar la orden.");
             return;
         }
 
-        alert("Compra registrada con éxito");
-
+        alert("¡Compra realizada con éxito!");
         carrito = {};
         guardarCarrito();
         cargarCarritoEnPagina();
         actualizarContador();
 
     } catch (error) {
-        console.error(" Error fetch:", error);
-        alert("Error de conexión con la API.");
+        console.error(error);
+        alert("Error de conexión con el servidor.");
     }
 });
 
-// =========================================
-//              INICIALIZAR
-// =========================================
+// Inicializar al cargar
 cargarCarritoEnPagina();
 actualizarContador();
- 

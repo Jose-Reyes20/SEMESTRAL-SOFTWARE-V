@@ -8,7 +8,6 @@
   </head>
 
   <body>
-    <!-- =========== HEADER =========== -->
     <header class="header">
       <img class="bg" src="Imagen/bg.svg" alt="" />
 
@@ -23,11 +22,8 @@
         <nav class="navbar">
           <ul>
             <li><a href="index.html">Inicio</a></li>
-            <li><a href="categorias.html">Categorías</a></li>
             <li><a href="productos.html">Productos</a></li>
-            <li><a href="ofertas.html">Ofertas</a></li>
 
-            <!-- Ícono Carrito -->
             <li class="cart-icon">
               <a href="carrito.html" aria-label="Carrito">
                 <svg width="26" height="26" viewBox="0 0 24 24">
@@ -45,7 +41,6 @@
               </a>
             </li>
 
-            <!-- Login -->
             <li class="login-icon" id="user-area">
               <a href="login.html" aria-label="Iniciar Sesión" id="login-link">
                 <svg viewBox="0 0 24 24" width="26" height="26">
@@ -65,211 +60,24 @@
       </div>
     </header>
 
-    <!-- =========== PRODUCTOS =========== -->
     <main class="products container">
       <h2>Lista de Productos</h2>
 
       <div class="service-list">
-
-        <!-- PRODUCTO 1: Laptop Pro X -->
-        <div class="service-card">
-          <img src="IMG/laptop.jpg" alt="Laptop Pro X" />
-          <h3>Laptop Pro X</h3>
-          <p>Portátil de alto rendimiento</p>
-          <span class="service-price">$1500.00</span>
-          <img src="IMG/laptop.png" alt="Laptop Pro X" />
-          <h3>Laptop Pro X</h3>
-          <p>Portátil de alto rendimiento</p>
-          <span class="service-price">$1500.00</span>
-
-          <div class="service-controls">
-            <button class="qty-btn minus" data-id="1" data-nombre="Laptop Pro X" data-precio="1500.00">−</button>
-            <span class="qty-display" data-id="1">0</span>
-            <button class="qty-btn plus" data-id="1" data-nombre="Laptop Pro X" data-precio="1500.00">+</button>
-          </div>
-        </div>
-
-        <!-- PRODUCTO 2: Teclado Mecánico -->
-        <div class="service-card">
-          <img src="IMG/teclado mecanico.png" alt="Teclado Mecánico" />
-          <h3>Teclado Mecánico</h3>
-          <p>Teclado RGB para gamers</p>
-          <span class="service-price">$85.50</span>
-
-          <div class="service-controls">
-            <button class="qty-btn minus" data-id="2" data-nombre="Teclado Mecánico" data-precio="85.50">−</button>
-            <span class="qty-display" data-id="2">0</span>
-            <button class="qty-btn plus" data-id="2" data-nombre="Teclado Mecánico" data-precio="85.50">+</button>
-          </div>
-        </div>
-
-        <!-- PRODUCTO 3: Camiseta Algodón -->
-        <div class="service-card">
-          <img src="IMG/camiseta algodon.jpeg" alt="Camiseta Algodón" />
-          <h3>Camiseta Algodón</h3>
-          <p>Camiseta básica 100% algodón</p>
-          <span class="service-price">$15.00</span>
-
-          <div class="service-controls">
-            <button class="qty-btn minus" data-id="3" data-nombre="Camiseta Algodón" data-precio="15.00">−</button>
-            <span class="qty-display" data-id="3">0</span>
-            <button class="qty-btn plus" data-id="3" data-nombre="Camiseta Algodón" data-precio="15.00">+</button>
-          </div>
-        </div>
-
-        <!-- PRODUCTO 4: Smartphone Z -->
-        <div class="service-card">
-          <img src="IMG/cell.jpeg" alt="Smartphone Z" />
-          <h3>Smartphone Z</h3>
-          <p>Último modelo de teléfono inteligente</p>
-          <span class="service-price">$800.00</span>
-
-          <div class="service-controls">
-            <button
-              class="qty-btn minus"
-              data-nombre="Gel para cabello"
-              data-precio="13.00"
-              data-id="4"
-            >
-              −
-            </button>
-
-            <span class="qty-display" data-nombre="Gel para cabello" data-id="4"
-              >0</span
-            >
-
-            <button
-              class="qty-btn plus"
-              data-nombre="Gel para cabello"
-              data-precio="13.00"
-              data-id="4"
-            >
-              +
-            </button>
-          </div>
-        </div>
-
-        <!-- PRODUCTO 5 -->
-        <div class="service-card">
-          <img src="Imagen/aceite.jpg" alt="" />
-          <h3>Aceite de cabello</h3>
-          <p>Repara y reduce el frizz sin dejar grasa.</p>
-
-          <span class="service-price">$28.00</span>
-
-          <div class="service-controls">
-            <button
-              class="qty-btn minus"
-              data-nombre="Aceite de cabello"
-              data-precio="28.00"
-              data-id="5"
-            >
-              −
-            </button>
-
-            <span
-              class="qty-display"
-              data-nombre="Aceite de cabello"
-              data-id="5"
-              >0</span
-            >
-
-            <button
-              class="qty-btn plus"
-              data-nombre="Aceite de cabello"
-              data-precio="28.00"
-              data-id="5"
-            >
-              +
-            </button>
-          </div>
-        </div>
-
-        <!-- PRODUCTO 6 -->
-        <div class="service-card">
-          <img src="Imagen/plancha.jpg" alt="" />
-          <h3>Plancha Profesional Titanium Pro</h3>
-          <p>
-            Herramienta profesional con excelente rendimiento para estilizar el
-            cabello.
-          </p>
-
-          <span class="service-price">$39.99</span>
-
-          <div class="service-controls">
-            <button
-              class="qty-btn minus"
-              data-nombre="Plancha Profesional Titanium Pro"
-              data-precio="39.99"
-              data-id="6"
-            >
-              −
-            </button>
-
-            <span
-              class="qty-display"
-              data-nombre="Plancha Profesional Titanium Pro"
-              data-id="6"
-              >0</span
-            >
-
-            <button
-              class="qty-btn plus"
-              data-nombre="Plancha Profesional Titanium Pro"
-              data-precio="39.99"
-              data-id="6"
-            >
-              +
-            </button>
-          </div>
-        </div>
-
-        <!-- PRODUCTO 7 -->
-        <div class="service-card">
-          <img src="Imagen/secadora.jpg" alt="" />
-          <h3>Secadora</h3>
-          <p>Secadora profesional de alta velocidad y tecnología iónica.</p>
-
-          <span class="service-price">$39.99</span>
-
-          <div class="service-controls">
-            <button
-              class="qty-btn minus"
-              data-nombre="Secadora"
-              data-precio="39.99"
-              data-id="7"
-            >
-              −
-            </button>
-
-            <span class="qty-display" data-nombre="Secadora" data-id="7"
-              >0</span
-            >
-
-            <button
-              class="qty-btn plus"
-              data-nombre="Secadora"
-              data-precio="39.99"
-              data-id="7"
-            >
-              +
-            </button>
-          </div>
-        </div>
+          <p style="text-align: center; width: 100%; font-weight: bold;">Cargando catálogo...</p>
       </div>
     </main>
 
-    <!-- =========== FOOTER =========== -->
     <footer class="footer container">
       <div class="footer-links">
 
         <div class="link">
           <h3>Contacto</h3>
           <ul>
-    <li><strong>Teléfono:</strong> +507 6501-2234</li>
-    <li><strong>WhatsApp:</strong> +507 6889-4410</li>
-    <li><strong>Correo:</strong> distribuidora.info@gmail.com</li>
-    <li><strong>Dirección:</strong> Panamá, Ciudad de Panamá</li>
+            <li><strong>Teléfono:</strong> +507 6501-2234</li>
+            <li><strong>WhatsApp:</strong> +507 6889-4410</li>
+            <li><strong>Correo:</strong> distribuidora.info@gmail.com</li>
+            <li><strong>Dirección:</strong> Panamá, Ciudad de Panamá</li>
           </ul>
         </div>
 
@@ -302,8 +110,11 @@
       </div>
     </footer>
 
-    <script src="JS/carrito.js"></script>
+    <script src="JS/config.js"></script>
     <script src="JS/session.js"></script>
+    <script src="JS/productos.js"></script>
+    <script src="JS/carrito.js"></script>
+
     <script>
       window.addEventListener("scroll", function () {
         if (window.scrollY > 20) {
